@@ -2,20 +2,21 @@ package com.comp6442.route42.model;
 
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.annotation.IgnoreExtraProperties;
-import com.google.cloud.firestore.annotation.ServerTimestamp;
 import com.google.firebase.internal.NonNull;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @IgnoreExtraProperties
-public class Post extends Model {
+public class Post extends Model implements Serializable {
   private DocumentReference uid;
   private String userName;
   private int isPublic;
   private String profilePicUrl;
-  @ServerTimestamp private Date postDatetime;
+  private Date postDatetime;
   private String postDescription = "";
   private String locationName;
   private Double latitude;
@@ -62,8 +63,8 @@ public class Post extends Model {
     this.geohash = geohash;
   }
 
-  public DocumentReference getUid() {
-    return uid;
+  public String getUid() {
+    return uid.getId().replaceAll("^\"|\"$", "");
   }
 
   public void setUid(DocumentReference uid) {
@@ -158,8 +159,11 @@ public class Post extends Model {
     this.imageUrl = imageUrl;
   }
 
-  public List<DocumentReference> getLikedBy() {
-    return likedBy;
+  public List<String> getLikedBy() {
+    return likedBy.stream()
+        .map(DocumentReference::getId)
+        .map(str -> str.replaceAll("^\"|\"$", ""))
+        .collect(Collectors.toList());
   }
 
   public void setLikedBy(List<DocumentReference> likedBy) {
@@ -177,23 +181,22 @@ public class Post extends Model {
   @NonNull
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder("Post{");
-    sb.append("id='").append(id).append('\'');
-    sb.append(", uid=").append(uid);
-    sb.append(", userName='").append(userName).append('\'');
-    sb.append(", isPublic=").append(isPublic);
-    sb.append(", profilePicUrl='").append(profilePicUrl).append('\'');
-    sb.append(", postDatetime=").append(postDatetime);
-    sb.append(", postDescription='").append(postDescription).append('\'');
-    sb.append(", locationName='").append(locationName).append('\'');
-    sb.append(", latitude=").append(latitude);
-    sb.append(", longitude=").append(longitude);
-    sb.append(", geohash='").append(geohash).append('\'');
-    sb.append(", hashtags=").append(hashtags);
-    sb.append(", likeCount=").append(likeCount);
-    sb.append(", imageUrl='").append(imageUrl).append('\'');
-    sb.append(", likedBy=").append(likedBy);
-    sb.append('}');
-    return sb.toString();
+    String sb = "Post{" + "id='" + id + '\'' +
+            ", uid=" + uid +
+            ", userName='" + userName + '\'' +
+            ", isPublic=" + isPublic +
+            ", profilePicUrl='" + profilePicUrl + '\'' +
+            ", postDatetime=" + postDatetime +
+            ", postDescription='" + postDescription + '\'' +
+            ", locationName='" + locationName + '\'' +
+            ", latitude=" + latitude +
+            ", longitude=" + longitude +
+            ", geohash='" + geohash + '\'' +
+            ", hashtags=" + hashtags +
+            ", likeCount=" + likeCount +
+            ", imageUrl='" + imageUrl + '\'' +
+            ", likedBy=" + likedBy +
+            '}';
+    return sb;
   }
 }

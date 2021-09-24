@@ -13,17 +13,16 @@ repositories {
 }
 
 dependencies {
-    implementation "org.slf4j:slf4j-simple:1.6.1"
     implementation 'com.google.firebase:firebase-admin:8.0.1'
 
     // Spring
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.cloud:spring-cloud-gcp-dependencies:2.0.2'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.5.4'
+    implementation 'org.springframework.cloud:spring-cloud-gcp-starter-firestore:1.2.8.RELEASE'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools:2.5.4'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.5.4'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.0'
 }
 
 test {

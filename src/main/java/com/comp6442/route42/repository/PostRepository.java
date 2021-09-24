@@ -1,32 +1,16 @@
 package com.comp6442.route42.repository;
 
 import com.comp6442.route42.model.Post;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.QuerySnapshot;
-import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-@Repository
-public class PostRepository extends FirestoreRepository<Post> {
-  private static PostRepository instance = null;
+public interface PostRepository {
+  Post getOne(String postId) throws InterruptedException, ExecutionException;
 
-  private PostRepository() {
-    super("posts", Post.class);
-  }
+  List<Post> getAll() throws InterruptedException, ExecutionException;
 
-  public static PostRepository getInstance() {
-    if (PostRepository.instance == null) {
-      PostRepository.instance = new PostRepository();
-    }
-    return PostRepository.instance;
-  }
+  //  Post add(Post post) throws InterruptedException, ExecutionException;
 
-  public DocumentReference getOne(String postId) {
-    return this.collection.document(postId);
-  }
-
-  public QuerySnapshot getAll() throws ExecutionException, InterruptedException {
-    return this.collection.get().get();
-  }
+  //  Post delete(long id);
 }
