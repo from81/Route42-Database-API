@@ -9,8 +9,4 @@ public interface PostRepository {
   Post getOne(String postId) throws InterruptedException, ExecutionException;
 
   List<Post> getAll() throws InterruptedException, ExecutionException;
-
-  //  Post add(Post post) throws InterruptedException, ExecutionException;
-
-  //  Post delete(long id);
 }
