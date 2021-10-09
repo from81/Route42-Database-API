@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @IgnoreExtraProperties
@@ -181,22 +182,81 @@ public class Post extends Model implements Serializable {
   @NonNull
   @Override
   public String toString() {
-    String sb = "Post{" + "id='" + id + '\'' +
-            ", uid=" + uid +
-            ", userName='" + userName + '\'' +
-            ", isPublic=" + isPublic +
-            ", profilePicUrl='" + profilePicUrl + '\'' +
-            ", postDatetime=" + postDatetime +
-            ", postDescription='" + postDescription + '\'' +
-            ", locationName='" + locationName + '\'' +
-            ", latitude=" + latitude +
-            ", longitude=" + longitude +
-            ", geohash='" + geohash + '\'' +
-            ", hashtags=" + hashtags +
-            ", likeCount=" + likeCount +
-            ", imageUrl='" + imageUrl + '\'' +
-            ", likedBy=" + likedBy +
-            '}';
+    String sb =
+        "Post{"
+            + "id='"
+            + id
+            + '\''
+            + ", uid="
+            + uid
+            + ", userName='"
+            + userName
+            + '\''
+            + ", isPublic="
+            + isPublic
+            + ", profilePicUrl='"
+            + profilePicUrl
+            + '\''
+            + ", postDatetime="
+            + postDatetime
+            + ", postDescription='"
+            + postDescription
+            + '\''
+            + ", locationName='"
+            + locationName
+            + '\''
+            + ", latitude="
+            + latitude
+            + ", longitude="
+            + longitude
+            + ", geohash='"
+            + geohash
+            + '\''
+            + ", hashtags="
+            + hashtags
+            + ", likeCount="
+            + likeCount
+            + ", imageUrl='"
+            + imageUrl
+            + '\''
+            + ", likedBy="
+            + likedBy
+            + '}';
     return sb;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (obj == null || getClass() != obj.getClass()) return false;
+    Post post = (Post) obj;
+    return Objects.equals(this.getId(), post.getId());
+    //    return isPublic == post.isPublic && likeCount == post.likeCount && Objects.equals(uid,
+    // post.uid) && Objects.equals(userName, post.userName) && Objects.equals(profilePicUrl,
+    // post.profilePicUrl) && Objects.equals(postDatetime, post.postDatetime) &&
+    // Objects.equals(postDescription, post.postDescription) && Objects.equals(locationName,
+    // post.locationName) && Objects.equals(latitude, post.latitude) && Objects.equals(longitude,
+    // post.longitude) && Objects.equals(geohash, post.geohash) && Objects.equals(hashtags,
+    // post.hashtags) && Objects.equals(imageUrl, post.imageUrl) && Objects.equals(likedBy,
+    // post.likedBy);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(
+        uid,
+        userName,
+        isPublic,
+        profilePicUrl,
+        postDatetime,
+        postDescription,
+        locationName,
+        latitude,
+        longitude,
+        geohash,
+        hashtags,
+        likeCount,
+        imageUrl,
+        likedBy);
   }
 }

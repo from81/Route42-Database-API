@@ -18,7 +18,10 @@ public class Token {
   }
 
   public static Token parseToken(String text) {
+    text = text.replaceAll("\\s+and|\\s+AND", "");
+    text = text.replaceAll("\\s+or|\\s+OR", "");
     text = text.trim();
+
     if (text.startsWith("(")) return new Token(TokenType.LBRA, "(");
     else if (text.startsWith(")")) return new Token(TokenType.RBRA, ")");
     else if (text.toLowerCase().startsWith("and")) return new Token(TokenType.AND, "AND");
@@ -31,11 +34,14 @@ public class Token {
 
   @Override
   public String toString() {
-    return "Token{" +
-            "tokenType=" + tokenType +
-            ", value='" + value + '\'' +
-            '}';
+    return "Token{" + "tokenType=" + tokenType + ", value='" + value + '\'' + '}';
   }
 
-  enum TokenType {LBRA, RBRA, AND, OR, FILTER}
+  enum TokenType {
+    LBRA,
+    RBRA,
+    AND,
+    OR,
+    FILTER
+  }
 }

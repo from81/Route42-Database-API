@@ -3,7 +3,6 @@ package com.comp6442.route42.controller;
 import com.comp6442.route42.exception.ResourceNotFoundException;
 import com.comp6442.route42.model.Post;
 import com.comp6442.route42.service.PostServiceImpl;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +28,7 @@ public class PostController {
   @GetMapping("/{id}")
   public ResponseEntity<Post> getPostById(@PathVariable String id)
       throws InterruptedException, ExecutionException, ResourceNotFoundException {
-    logger.log(Level.INFO, String.format("getPostById: %s", id));
+    logger.log(Level.INFO, String.format("GET/post/{id}: %s", id));
     Post post = postService.getOne(id);
     if (post == null) throw new ResourceNotFoundException("Post not Found");
     logger.log(Level.INFO, post.toString());

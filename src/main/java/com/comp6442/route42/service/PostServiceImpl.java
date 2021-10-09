@@ -20,4 +20,14 @@ public class PostServiceImpl implements PostService {
   public List<Post> getAll() throws InterruptedException, ExecutionException {
     return postRepository.getAll();
   }
+
+  public List<Post> getByUsername(String value) throws ExecutionException, InterruptedException {
+    return postRepository.getByUsername(value);
+  }
+
+  public List<Post> getByHashtags(List<String> hashtags)
+      throws ExecutionException, InterruptedException {
+    if (hashtags.size() > 10) hashtags = hashtags.subList(0, 10);
+    return postRepository.getByHashtags(hashtags);
+  }
 }
