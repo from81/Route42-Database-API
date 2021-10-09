@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-kill -9 $(lsof -t -i:8080)
-echo "Killed process running on port 8080"
+kill $(lsof -t -i)
+echo "Killed process running"
 
-java -jar Route42RestAPI-1.0-SNAPSHOT.jar
+GOOGLE_APPLICATION_CREDENTIALS="/home/ec2-user/application_default_credentials.json" nohup java -jar Route42RestAPI-1.0-SNAPSHOT.jar &
 echo "Started server using java -jar command"
