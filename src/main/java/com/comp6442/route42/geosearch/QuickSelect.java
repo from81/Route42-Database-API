@@ -2,7 +2,6 @@ package com.comp6442.route42.geosearch;
 
 import java.util.Comparator;
 import java.util.*;
-import java.util.Random;
 
 public class QuickSelect {
 

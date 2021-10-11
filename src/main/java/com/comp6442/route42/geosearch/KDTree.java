@@ -2,10 +2,26 @@ package com.comp6442.route42.geosearch;
 
 import java.util.*;
 
+/**
+ * KD_Tree class creates KD-Tree and search nearest points
+ * Reference and explanation for KD-Tree is at below
+ * https://rosettacode.org/wiki/K-d_tree#Java
+ */
+
 public class KDTree {
     private Node rootNode = null;
     private Node bestNode = null;
+    private List<Node> kbestNodes = new ArrayList<>();
     private double bestDistance = 0;
+    private List<Double> kbestDistances = new ArrayList<>();
+
+    public KD_Tree(){
+
+    }
+
+    public KD_Tree(Node node){
+        this.rootNode = node;
+    }
 
     public KDTree(List<Node> nodes){
         this.rootNode = createTree(nodes, 0, nodes.size(), 0);
@@ -42,8 +58,71 @@ public class KDTree {
         searchNearest(diff > 0 ? root.right : root.left, target, index);
     }
 
+    public List<Node> findkNearest(int k, double lat, double lon){
+        Node target = new Node(lat, lon);
+        if(rootNode == null){
+            throw new IllegalStateException("Tree is Empty!");
+        }
+        kbestNodes = new ArrayList<>();
+        bestNode = null;
+        bestDistance = 0;
+        int store = 0;
+        while(store < k){
+            searchkNearest(rootNode, k, store, target, 0);
+            kbestDistances.add(bestDistance);
+            kbestNodes.add(bestNode);
+            System.out.println(" kbestNodes updates with " + bestNode + " distance : " + bestDistance);
+            bestNode = null;
+            bestDistance = 0;
+            store++;
+        }
+        return kbestNodes;
+    }
+
+    private void searchkNearest(Node root, int k, int store, Node target, int index){
+        if(root == null){
+            return;
+        }
+        double d = root.getDistanceFrom(target);
+        if(bestNode == null || d < bestDistance){
+            if(kbestDistances.size() != 0){
+                if((Double)d <= kbestDistances.get(store-1)){
+                    double diff = root.getCoordValue(index) - target.getCoordValue(index);
+                    index = (index + 1) % 2;
+                    searchkNearest(diff > 0 ? root.left : root.right, k, store, target, index);
+                    if(Math.sqrt(diff * diff) >= Math.max(bestDistance,kbestDistances.get(store-1))){
+                        return;
+                    }
+                    searchkNearest(diff > 0 ? root.right : root.left, k, store, target, index);
+                }
+                else{
+                    bestDistance = d;
+                    bestNode = root;
+                }
+            }
+            else{
+                bestDistance = d;
+                bestNode = root;
+            }
+        }
+        if(bestDistance == 0){
+            return;
+        }
+        double diff = root.getCoordValue(index) - target.getCoordValue(index);
+        index = (index + 1) % 2;
+        searchkNearest(diff > 0 ? root.left : root.right, k, store, target, index);
+        if(Math.sqrt(diff * diff) >= bestDistance){
+            return;
+        }
+        searchkNearest(diff > 0 ? root.right : root.left, k, store, target, index);
+    }
+
     public double getBestDistance() {
         return bestDistance;
+    }
+
+    public double getkBestDistance(int index) {
+        return kbestDistances.get(index);
     }
 
     private Node createTree(List<Node> nodes, int begin, int end, int index){
@@ -83,16 +162,34 @@ public class KDTree {
     }
 
     public static class Node{
-        private double[] coords;
+        private double[] coords = new double[2];
+        private double lat, lon;
         private Node left = null;
         private Node right = null;
 
         public Node(double[] coords){
             this.coords = coords;
+            this.lat = coords[0];
+            this.lon = coords[1];
+        }
+
+        public Node(double latitude, double longitude){
+            this.coords[0] = latitude;
+            this.lat = latitude;
+            this.coords[1] = longitude;
+            this.lon = longitude;
         }
 
         double[] getCoords(){
             return this.coords;
+        }
+
+        double getLatitude() {
+            return this.lat;
+        }
+
+        double getLongitude() {
+            return this.lon;
         }
 
         double getCoordValue(int index){
