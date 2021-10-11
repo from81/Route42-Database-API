@@ -12,7 +12,6 @@ public class KD_Tree {
     }
 
     public Node findNearest(Node target){
-        System.out.println(" findNearest : target " + target);
         if(rootNode == null){
             throw new IllegalStateException("Tree is Empty!");
         }
@@ -23,7 +22,6 @@ public class KD_Tree {
     }
 
     private void searchNearest(Node root, Node target, int index){
-        System.out.println(" searchNearest : root " + root + " target " + target + " at index=" + index);
         if(root == null){
             return;
         }
@@ -35,18 +33,12 @@ public class KD_Tree {
         if(bestDistance == 0){
             return;
         }
-        System.out.println(" distance d=" + d + " best distance=" + bestDistance);
         double diff = root.getCoordValue(index) - target.getCoordValue(index);
         index = (index + 1) % 2;
-        System.out.println(" diff = root - target =" + diff);
-        System.out.println(diff > 0 ? " search left " : " search right ");
         searchNearest(diff > 0 ? root.left : root.right, target, index);
         if(Math.sqrt(diff * diff) >= bestDistance){
-            System.out.println(" target matched, Math.sqrt(diff * diff)=" + Math.sqrt(diff * diff) + " >= bestDistance=" + bestDistance);
             return;
         }
-        System.out.println(" target unmatched, Math.sqrt(diff * diff)=" + Math.sqrt(diff * diff) + " < bestDistance=" + bestDistance);
-        System.out.println(diff > 0 ? " search right " : " search left ");
         searchNearest(diff > 0 ? root.right : root.left, target, index);
     }
 
@@ -55,13 +47,11 @@ public class KD_Tree {
     }
 
     private Node createTree(List<Node> nodes, int begin, int end, int index){
-//        System.out.println(" createTree : nodes at (begin=" + begin + ", end=" + end + ") for index=" + index);
         if(end <= begin){
             return null;
         }
         int n = begin + (end - begin)/2;
         Node node = QuickSelect.select(nodes, begin, end - 1, n, new NodeComparator(index));
-//        System.out.println(node.display(0));
         index = (index + 1) % 2;
         node.left = createTree(nodes, begin, n, index);
         node.right = createTree(nodes, n+1, end, index);
