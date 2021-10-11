@@ -1,36 +1,37 @@
 package com.comp6442.route42.geosearch;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.*;
 import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class KD_TreeTest {
+
+public class KDTreeTest {
 
     @Test
     public void test2DRandom() {
         double[] results = testRandom(3, 2);
-        assertEquals("Wrong Coordinate", results[0], results[1],1e-8);
+        assertEquals(results[0], results[1],1e-8, "Wrong Coordinate");
     }
 
     public static double[] testRandom(int points, int dimension) {
         Random random = new Random();
-        List<KD_Tree.Node> nodes = new ArrayList<>();
+        List<KDTree.Node> nodes = new ArrayList<>();
         for(int i=0; i < points; i++){
             nodes.add(randomNPoint(random, dimension));
         }
-        KD_Tree tree = new KD_Tree(nodes);
+        KDTree tree = new KDTree(nodes);
         System.out.println(tree.display(0));
-        KD_Tree.Node target = randomNPoint(random, dimension);
-        KD_Tree.Node nearest = tree.findNearest(target);
+        KDTree.Node target = randomNPoint(random, dimension);
+        KDTree.Node nearest = tree.findNearest(target);
         System.out.println("print all data : ");
         int i=0;
         double[] bestDistanceResults = new double[2];
         bestDistanceResults[0] = tree.getBestDistance();
         bestDistanceResults[1] = nodes.get(0).getDistanceFrom(target);
-        for(KD_Tree.Node node : nodes){
+        for(KDTree.Node node : nodes){
             System.out.print("data" + i + ": ");
             System.out.print(node);
             double dist = node.getDistanceFrom(target);
@@ -47,11 +48,11 @@ public class KD_TreeTest {
         return bestDistanceResults;
     }
 
-    private static KD_Tree.Node randomNPoint(Random random, int dimension){
+    private static KDTree.Node randomNPoint(Random random, int dimension){
         double[] coord = new double[dimension];
         for(int i=0; i < dimension; i++){
             coord[i] = random.nextDouble();
         }
-        return new KD_Tree.Node(coord);
+        return new KDTree.Node(coord);
     }
 }

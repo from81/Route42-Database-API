@@ -2,12 +2,12 @@ package com.comp6442.route42.geosearch;
 
 import java.util.*;
 
-public class KD_Tree {
+public class KDTree {
     private Node rootNode = null;
     private Node bestNode = null;
     private double bestDistance = 0;
 
-    public KD_Tree(List<Node> nodes){
+    public KDTree(List<Node> nodes){
         this.rootNode = createTree(nodes, 0, nodes.size(), 0);
     }
 
