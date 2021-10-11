@@ -50,8 +50,8 @@ public class KDTreeTest {
 
     @Test
     public void testFindMultiNearest() {
-        int k_points = 10000;
-        List<KD_Tree.Node> nodes = generateNodes(10000);
+        int k_points = 10;
+        List<KD_Tree.Node> nodes = generateNodes(50);
         KD_Tree tree = generateKD_Tree(nodes);
         System.out.println(tree.display(0));
 
@@ -71,7 +71,7 @@ public class KDTreeTest {
             i++;
         }
 
-        nodes = generateNodes(10000);
+        nodes = generateNodes(100);
         tree = generateKD_Tree(nodes);
         System.out.println(tree.display(0));
 
