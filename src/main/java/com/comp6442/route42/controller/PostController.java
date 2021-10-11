@@ -35,9 +35,9 @@ public class PostController {
     return new ResponseEntity<>(post, org.springframework.http.HttpStatus.OK);
   }
 
-  @GetMapping("/")
-  public ResponseEntity<List<Post>> getPosts() throws InterruptedException, ExecutionException {
-    List<Post> posts = postService.getAll();
-    return new ResponseEntity<>(posts, org.springframework.http.HttpStatus.OK);
-  }
+//  @GetMapping("/")
+//  public ResponseEntity<List<Post>> getPosts() throws InterruptedException, ExecutionException {
+//    List<Post> posts = postService.getAll();
+//    return new ResponseEntity<>(posts, org.springframework.http.HttpStatus.OK);
+//  }
 }
