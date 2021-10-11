@@ -231,6 +231,7 @@ public class Post extends Model implements Serializable {
     if (obj == null || getClass() != obj.getClass()) return false;
     Post post = (Post) obj;
     return Objects.equals(this.getId(), post.getId());
+    // TODO
     //    return isPublic == post.isPublic && likeCount == post.likeCount && Objects.equals(uid,
     // post.uid) && Objects.equals(userName, post.userName) && Objects.equals(profilePicUrl,
     // post.profilePicUrl) && Objects.equals(postDatetime, post.postDatetime) &&
