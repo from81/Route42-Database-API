@@ -71,7 +71,6 @@ public class KDTree {
             searchkNearest(rootNode, k, store, target, 0);
             kbestDistances.add(bestDistance);
             kbestNodes.add(bestNode);
-            System.out.println(" kbestNodes updates with " + bestNode + " distance : " + bestDistance);
             bestNode = null;
             bestDistance = 0;
             store++;
