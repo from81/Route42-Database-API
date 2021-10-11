@@ -11,4 +11,4 @@ PATH=$PATH:$HOME/.local/bin:$HOME/bin
 
 export PATH
 
-export GOOGLE_APPLICATION_CREDENTIALS="/home/ec2-user/application_default_credentials.json"
+export GOOGLE_APPLICATION_CREDENTIALS="${HOME}/google_application_credentials_route42.json"

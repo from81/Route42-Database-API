@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Primary;
 @SpringBootApplication
 public class Route42API {
   public static void main(String[] args) {
-    System.out.println(System.getenv("GOOGLE_APPLICATION_CREDENTIALS"));
     SpringApplication.run(Route42API.class, args);
   }
 

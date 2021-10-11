@@ -17,7 +17,7 @@ echo "Copied jar file from local machine to ec2 instance"
 scp -i $KEY execute_commands_ec2.sh ${AWS_USERNAME}@${AWS_HOSTNAME}:/home/ec2-user
 echo "Copied latest startup script from local machine to ec2 instance"
 
-scp -i $KEY "$CREDS" ${AWS_USERNAME}@${AWS_HOSTNAME}:/home/ec2-user/application_default_credentials.json
+scp -i $KEY "$CREDS" ${AWS_USERNAME}@${AWS_HOSTNAME}:${HOME}/google_application_credentials_route42.json
 echo "Copied google credentials from local machine to ec2 instance"
 
 echo "Connecting to ec2 instance and starting server using java -jar command"
