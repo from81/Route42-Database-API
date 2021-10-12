@@ -30,8 +30,6 @@ public class SearchController {
 
   @Autowired PostServiceImpl postService;
 
-  @Autowired ObjectMapper mapper;
-
   @PostMapping(consumes = "application/json", produces = "application/json")
   public ResponseEntity<List<Post>> search(@RequestBody QueryString query)
       throws InterruptedException, ExecutionException, ResourceNotFoundException {

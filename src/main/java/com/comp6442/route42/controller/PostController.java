@@ -23,8 +23,6 @@ public class PostController {
 
   @Autowired PostServiceImpl postService;
 
-  @Autowired ObjectMapper mapper;
-
   @GetMapping("/{id}")
   public ResponseEntity<Post> getPostById(@PathVariable String id)
       throws InterruptedException, ExecutionException, ResourceNotFoundException {
@@ -33,11 +31,5 @@ public class PostController {
     if (post == null) throw new ResourceNotFoundException("Post not Found");
     logger.log(Level.INFO, post.toString());
     return new ResponseEntity<>(post, org.springframework.http.HttpStatus.OK);
-  }
-
-  @GetMapping("/")
-  public ResponseEntity<List<Post>> getPosts() throws InterruptedException, ExecutionException {
-    List<Post> posts = postService.getAll();
-    return new ResponseEntity<>(posts, org.springframework.http.HttpStatus.OK);
   }
 }

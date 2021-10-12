@@ -3,6 +3,7 @@ package com.comp6442.route42.repository;
 import com.comp6442.route42.model.Post;
 import com.google.cloud.firestore.Firestore;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@Component("postRepository")
 @Repository
 public class PostRepositoryImpl extends FirestoreRepository<Post> implements PostRepository {
   private static final Logger logger = Logger.getLogger(PostRepositoryImpl.class.getName());
