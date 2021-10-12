@@ -8,9 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest(classes = PostTest.class)
 public class PostTest {
   @Test
-  public void contextLoads() {}
-
-  @Test
   public void testInstantiation() {
     Post post = new Post();
     Assert.assertEquals(0, post.getIsPublic());
