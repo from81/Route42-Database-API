@@ -18,37 +18,6 @@ public class KDTree {
     this.rootNode = node;
   }
 
-  public KDTreeNode findNearest(KDTreeNode target) {
-    if (rootNode == null) {
-      throw new IllegalStateException("Tree is Empty!");
-    }
-    bestNode = null;
-    bestDistance = 0;
-    searchNearest(rootNode, target, 0);
-    return bestNode;
-  }
-
-  private void searchNearest(KDTreeNode root, KDTreeNode target, int index) {
-    if (root == null) {
-      return;
-    }
-    double d = root.getDistanceTo(target);
-    if (bestNode == null || d < bestDistance) {
-      bestDistance = d;
-      bestNode = root;
-    }
-    if (bestDistance == 0) {
-      return;
-    }
-    double diff = root.getCoordValue(index) - target.getCoordValue(index);
-    index = (index + 1) % 2;
-    searchNearest(diff > 0 ? root.getLeft() : root.getRight(), target, index);
-    if (Math.sqrt(diff * diff) >= bestDistance) {
-      return;
-    }
-    searchNearest(diff > 0 ? root.getRight() : root.getLeft(), target, index);
-  }
-
   public List<KDTreeNode> findKNearest(int k, double lat, double lon) {
     KDTreeNode target = new KDTreeNode(lat, lon);
     if (rootNode == null) {
