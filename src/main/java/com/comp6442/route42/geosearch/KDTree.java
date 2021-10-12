@@ -10,8 +10,8 @@ import java.util.List;
 public class KDTree {
   private final List<Double> kbestDistances = new ArrayList<>();
   private final KDTreeNode rootNode;
-  private KDTreeNode bestNode = null;
   private List<KDTreeNode> kbestNodes = new ArrayList<>();
+  private KDTreeNode bestNode = null;
   private double bestDistance = 0;
 
   public KDTree(KDTreeNode node) {
@@ -31,15 +31,16 @@ public class KDTree {
     bestNode = null;
     bestDistance = 0;
     while (kbestNodes.size() < k) {
-      searchKNearest(rootNode, k, target, 0);
+      searchKNearest(rootNode, target, 0);
       kbestDistances.add(bestDistance);
       kbestNodes.add(bestNode);
       bestDistance = 0;
+      bestNode = null;
     }
     return kbestNodes;
   }
 
-  private void searchKNearest(KDTreeNode root, int k, KDTreeNode target, int index) {
+  private void searchKNearest(KDTreeNode root, KDTreeNode target, int index) {
     if (root == null) return;
     double d = root.getDistanceTo(target);
     if (bestNode == null || d < bestDistance) {
@@ -47,11 +48,11 @@ public class KDTree {
         if ((Double) d <= kbestDistances.get(kbestNodes.size() - 1)) {
           double diff = root.getCoordValue(index) - target.getCoordValue(index);
           index = (index + 1) % 2;
-          searchKNearest(diff > 0 ? root.getLeft() : root.getRight(), k, target, index);
+          searchKNearest(diff > 0 ? root.getLeft() : root.getRight(), target, index);
           if (Math.sqrt(diff * diff) >= Math.max(bestDistance, kbestDistances.get(kbestNodes.size() - 1))) {
             return;
           }
-          searchKNearest(diff > 0 ? root.getRight() : root.getLeft(), k, target, index);
+          searchKNearest(diff > 0 ? root.getRight() : root.getLeft(), target, index);
           return;
         } else {
           bestDistance = d;
@@ -67,11 +68,11 @@ public class KDTree {
     }
     double diff = root.getCoordValue(index) - target.getCoordValue(index);
     index = (index + 1) % 2;
-    searchKNearest(diff > 0 ? root.getLeft() : root.getRight(), k, target, index);
+    searchKNearest(diff > 0 ? root.getLeft() : root.getRight(), target, index);
     if (Math.sqrt(diff * diff) >= bestDistance) {
       return;
     }
-    searchKNearest(diff > 0 ? root.getRight() : root.getLeft(), k, target, index);
+    searchKNearest(diff > 0 ? root.getRight() : root.getLeft(), target, index);
   }
 
   public double getBestDistance() {
