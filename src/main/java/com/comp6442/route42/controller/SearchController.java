@@ -1,20 +1,18 @@
 package com.comp6442.route42.controller;
 
 import com.comp6442.route42.exception.ResourceNotFoundException;
+import com.comp6442.route42.geosearch.KDTree;
+import com.comp6442.route42.geosearch.KDTreeNode;
 import com.comp6442.route42.model.Post;
 import com.comp6442.route42.model.QueryString;
 import com.comp6442.route42.query.QueryTreeNode;
 import com.comp6442.route42.query.Token;
 import com.comp6442.route42.query.Tokenizer;
 import com.comp6442.route42.service.PostServiceImpl;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -51,6 +49,20 @@ public class SearchController {
       else return new ResponseEntity<>(posts, HttpStatus.OK);
     }
     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+  }
+
+  @GetMapping("/knn")
+  public ResponseEntity<List<Post>> getKNearest(
+          @RequestParam(required = true, value="lat") Double lat,
+          @RequestParam(required = true, value="lon") Double lon,
+          @RequestParam(required = true, defaultValue = "1", value="k") int k
+  ) throws ExecutionException, InterruptedException {
+
+    logger.log(Level.INFO, String.format("GET/search/knn: k=%d lat=%f lon=%f", k, lat, lon));
+    KDTree tree = KDTree.fromPosts(postService.getMany(200));
+    List<KDTreeNode> knn = tree.findKNearest(k, lat, lon);
+    List<Post> posts = knn.stream().map(KDTreeNode::getPost).collect(Collectors.toList());
+    return new ResponseEntity<>(posts, HttpStatus.OK);
   }
 
   private List<Post> processQueryTreeNode(QueryTreeNode node) {

@@ -37,8 +37,8 @@ public class PostRepositoryImpl extends FirestoreRepository<Post> implements Pos
     return this.collection.document(postId).get().get().toObject(Post.class);
   }
 
-  public List<Post> getAll() throws ExecutionException, InterruptedException {
-    return this.collection.get().get().toObjects(Post.class);
+  public List<Post> getMany(int n) throws ExecutionException, InterruptedException {
+    return this.collection.limit(n).get().get().toObjects(Post.class);
   }
 
   public List<Post> getByUsername(String username) throws ExecutionException, InterruptedException {

@@ -1,7 +1,10 @@
 package com.comp6442.route42.geosearch;
 
+import com.comp6442.route42.model.Post;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * KD_Tree class creates KD-Tree and search nearest points Reference and explanation for KD-Tree is
@@ -87,6 +90,10 @@ public class KDTree {
     if (nodes.size() == 0) return null;
     KDTreeNode node = KDTreeNode.fromNodes(nodes, 0, nodes.size(), 0);
     return new KDTree(node);
+  }
+
+  public static KDTree fromPosts(List<Post> posts){
+    return fromNodes(posts.stream().map(KDTreeNode::fromPost).collect(Collectors.toList()));
   }
 
   public String toString() {

@@ -8,5 +8,5 @@ import java.util.concurrent.ExecutionException;
 public interface PostRepository {
   Post getOne(String postId) throws InterruptedException, ExecutionException;
 
-  List<Post> getAll() throws InterruptedException, ExecutionException;
+  List<Post> getMany(int n) throws InterruptedException, ExecutionException;
 }

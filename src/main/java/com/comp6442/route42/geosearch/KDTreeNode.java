@@ -1,5 +1,6 @@
 package com.comp6442.route42.geosearch;
 
+import com.comp6442.route42.model.Post;
 import com.google.cloud.firestore.GeoPoint;
 
 import javax.annotation.Nonnull;
@@ -10,11 +11,17 @@ public class KDTreeNode extends GeoPoint {
   private KDTreeNode left = null;
   private KDTreeNode right = null;
   private Double[] coords = new Double[2];
+  private Post post;
 
   public KDTreeNode(double latitude, double longitude)  {
     super(latitude, longitude);
     this.coords[0] = longitude;
     this.coords[1] = latitude;
+  }
+
+  public KDTreeNode(Post post) {
+    this(post.getLatitude(), post.getLongitude());
+    this.post = post;
   }
 
   public Double getCoordValue(int idx) {
@@ -27,6 +34,14 @@ public class KDTreeNode extends GeoPoint {
 
   public KDTreeNode getRight() {
     return right;
+  }
+
+  public Post getPost() {
+    return post;
+  }
+
+  public void setPost(Post post) {
+    this.post = post;
   }
 
   public void setLeft(KDTreeNode left) {
@@ -78,6 +93,10 @@ public class KDTreeNode extends GeoPoint {
     node.setLeft(fromNodes(nodes, begin, n, index));
     node.setRight(fromNodes(nodes, n + 1, end, index));
     return node;
+  }
+
+  public static KDTreeNode fromPost(Post post) {
+    return new KDTreeNode(post);
   }
 
   public static class NodeComparator implements Comparator<KDTreeNode> {

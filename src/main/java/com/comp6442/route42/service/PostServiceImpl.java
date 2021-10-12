@@ -19,8 +19,8 @@ public class PostServiceImpl implements PostService {
     return postRepository.getOne(postId);
   }
 
-  public List<Post> getAll() throws InterruptedException, ExecutionException {
-    return postRepository.getAll();
+  public List<Post> getMany(int n) throws InterruptedException, ExecutionException {
+    return postRepository.getMany(n);
   }
 
   public List<Post> getByUsername(String value) throws ExecutionException, InterruptedException {
