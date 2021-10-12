@@ -23,7 +23,7 @@ public class KDTreeTest {
             i++;
         }
 
-        KDTreeNode nearest_node = tree.findNearest(target);
+        KDTreeNode nearest_node = tree.findKNearest(1, target).get(0);
         System.out.println(" nearest neighbor node : " + nearest_node + " distance : " + tree.getBestDistance());
 
         Assertions.assertEquals(nearest_node.getDistanceTo(target), tree.getBestDistance(), 1e-8, "Wrong Coordinate");
@@ -40,7 +40,7 @@ public class KDTreeTest {
             i++;
         }
 
-        nearest_node = tree.findNearest(target);
+        nearest_node = tree.findKNearest(1, target).get(0);
         System.out.println(" nearest neighbor node : " + nearest_node + " distance : " + tree.getBestDistance());
 
         Assertions.assertEquals(nearest_node.getDistanceTo(target), tree.getBestDistance(), 1e-8, "Wrong Coordinate");
@@ -100,7 +100,7 @@ public class KDTreeTest {
     }
 
     public static KDTree generateKDTree(List<KDTreeNode> nodes) {
-        KDTree tree = KDTree.fromNodes(nodes);;
+        KDTree tree = KDTree.fromNodes(nodes);
         return tree;
     }
 
