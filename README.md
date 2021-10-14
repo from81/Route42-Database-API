@@ -21,9 +21,10 @@ Public IPv4 address: `13.211.169.204`
 
 > You can only test the REST API locally. To deploy, create a merge request and owner of the repository will merge your branch once the merge request is approved.
 
-Run locally:
+Run locally: (choose either command)
 ```
-GOOGLE_APPLICATION_CREDENTIALS=-firebase-adminsdk.json ./gradlew bootRun
+GOOGLE_APPLICATION_CREDENTIALS=./google_application_credentials_route42.json ./gradlew bootRun
+GOOGLE_APPLICATION_CREDENTIALS=./google_application_credentials_route42.json java -jar build/libs/Route42RestAPI-1.0-SNAPSHOT.jar
 ```
 
 Testing GET
