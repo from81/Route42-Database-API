@@ -29,11 +29,10 @@ public class SearchController {
   @Autowired PostServiceImpl postService;
 
   @PostMapping(consumes = "application/json", produces = "application/json")
-  public ResponseEntity<List<Post>> search(@RequestBody QueryString query)
-      throws InterruptedException, ExecutionException, ResourceNotFoundException {
+  public ResponseEntity<List<Post>> search(@RequestBody QueryString query) {
     logger.log(Level.INFO, String.format("POST/search/:%s", query));
 
-    List<Token> tokens = Tokenizer.tokenizeQuery(query.toString());
+    List<Token> tokens = Tokenizer.tokenizeQuery(query.getQuery());
     tokens.forEach(
         token -> {
           logger.log(Level.INFO, token.toString());
@@ -45,19 +44,21 @@ public class SearchController {
       List<Post> posts = processQueryTreeNode(node);
       logger.log(Level.INFO, posts.toString());
 
-      if (posts.size() == 0) return new ResponseEntity<>(HttpStatus.OK);
-      else return new ResponseEntity<>(posts, HttpStatus.OK);
+      if (posts.size() == 0) {
+        return new ResponseEntity<>(HttpStatus.OK);
+      } else {
+        posts = posts.subList(0, Math.min(query.getLimit(), posts.size()));
+        return new ResponseEntity<>(posts, HttpStatus.OK);
+      }
     }
     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
   }
 
   @GetMapping("/knn")
   public ResponseEntity<List<Post>> getKNearest(
-          @RequestParam(required = true, value="lat") Double lat,
-          @RequestParam(required = true, value="lon") Double lon,
-          @RequestParam(required = true, defaultValue = "1", value="k") int k
-  ) throws ExecutionException, InterruptedException {
-
+          @RequestParam(value = "lat") Double lat,
+          @RequestParam(value = "lon") Double lon,
+          @RequestParam(defaultValue = "1", value = "k") int k) throws ExecutionException, InterruptedException {
     logger.log(Level.INFO, String.format("GET/search/knn: k=%d lat=%f lon=%f", k, lat, lon));
     KDTree tree = KDTree.fromPosts(postService.getMany(200));
     List<KDTreeNode> knn = tree.findKNearest(k, lat, lon);
@@ -80,8 +81,7 @@ public class SearchController {
   }
 
   private static List<Post> intersection(List<Post> result1, List<Post> result2) {
-    List<Post> intersectElements =
-        result1.stream().filter(result2::contains).collect(Collectors.toList());
+    List<Post> intersectElements = result1.stream().filter(result2::contains).collect(Collectors.toList());
 
     if (!intersectElements.isEmpty()) {
       return intersectElements;
