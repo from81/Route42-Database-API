@@ -18,9 +18,8 @@ import java.util.logging.Logger;
 @Repository
 public class PostRepositoryImpl extends FirestoreRepository<Post> implements PostRepository {
   private static final Logger logger = Logger.getLogger(PostRepositoryImpl.class.getName());
-  @Autowired private Firestore firestore;
-
   private static PostRepositoryImpl instance = null;
+  @Autowired private Firestore firestore;
 
   private PostRepositoryImpl() {
     super("posts", Post.class);

@@ -5,10 +5,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class QueryString {
   private String query;
+  private final int limit;
 
   @JsonCreator
-  public QueryString(@JsonProperty("query") String query) {
+  public QueryString(@JsonProperty("query") String query, @JsonProperty("limit") int limit) {
     this.query = query;
+    this.limit = limit;
   }
 
   public String getQuery() {
@@ -19,8 +21,16 @@ public class QueryString {
     this.query = query;
   }
 
+  public int getLimit() {
+    return limit;
+  }
+
   @Override
   public String toString() {
-    return this.query;
+    final StringBuilder sb = new StringBuilder("QueryString{");
+    sb.append("query='").append(query).append('\'');
+    sb.append(", limit=").append(limit);
+    sb.append('}');
+    return sb.toString();
   }
 }

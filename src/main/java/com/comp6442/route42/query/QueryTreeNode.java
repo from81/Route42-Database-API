@@ -5,10 +5,11 @@ import java.util.*;
 import static com.comp6442.route42.query.Token.TokenType.*;
 
 public class QueryTreeNode {
+  private final Set<String> supportedAttributes =
+      new HashSet<>(Arrays.asList("username", "hashtags"));
   private String key;
   private QueryTreeNode left = null, right = null;
   private String value = null;
-  private final Set<String> supportedAttributes = new HashSet<>(Arrays.asList("username", "hashtags"));
 
   private QueryTreeNode(String key) {
     this.key = key;
@@ -18,67 +19,6 @@ public class QueryTreeNode {
     if (!supportedAttributes.contains(key)) throw new ClassCastException("invalid attribute");
     this.key = key;
     this.value = value;
-  }
-
-  public String getKey() {
-    return key;
-  }
-
-  public String getValue() {
-    return value;
-  }
-
-  public QueryTreeNode getLeft() {
-    return left;
-  }
-
-  public QueryTreeNode getRight() {
-    return right;
-  }
-
-  public void setKey(String key) {
-    this.key = key;
-  }
-
-  public void setLeft(QueryTreeNode left) {
-    this.left = left;
-  }
-
-  public void setRight(QueryTreeNode right) {
-    this.right = right;
-  }
-
-  public void setValue(String value) {
-    this.value = value;
-  }
-
-  @Override
-  public String toString() {
-    if (this.value == null) {
-      return String.format("{ %s: [\n\t%s\n\t%s\n\t]\n}", key, left.toString(1), right.toString(1));
-    } else {
-      return String.format("{ %s: %s }", key, value);
-    }
-  }
-
-  public String toString(int level) {
-    String indent = "";
-    for (int i = 0; i < level; i++) indent += "\t";
-    if (this.value == null) {
-      return String.format(
-          "%s{ %s%s: [\n\t%s%s\n\t%s%s\n\t\t%s]\n\t%s},",
-          indent,
-          indent,
-          key,
-          indent,
-          left.toString(level + 1),
-          indent,
-          right.toString(level + 1),
-          indent,
-          indent);
-    } else {
-      return String.format("%s{ %s: %s },", indent, key, value);
-    }
   }
 
   public static QueryTreeNode fromToken(Token token) {
@@ -153,5 +93,66 @@ public class QueryTreeNode {
     }
 
     return null;
+  }
+
+  public String getKey() {
+    return key;
+  }
+
+  public void setKey(String key) {
+    this.key = key;
+  }
+
+  public String getValue() {
+    return value;
+  }
+
+  public void setValue(String value) {
+    this.value = value;
+  }
+
+  public QueryTreeNode getLeft() {
+    return left;
+  }
+
+  public void setLeft(QueryTreeNode left) {
+    this.left = left;
+  }
+
+  public QueryTreeNode getRight() {
+    return right;
+  }
+
+  public void setRight(QueryTreeNode right) {
+    this.right = right;
+  }
+
+  @Override
+  public String toString() {
+    if (this.value == null) {
+      return String.format("{ %s: [\n\t%s\n\t%s\n\t]\n}", key, left.toString(1), right.toString(1));
+    } else {
+      return String.format("{ %s: %s }", key, value);
+    }
+  }
+
+  public String toString(int level) {
+    String indent = "";
+    for (int i = 0; i < level; i++) indent += "\t";
+    if (this.value == null) {
+      return String.format(
+          "%s{ %s%s: [\n\t%s%s\n\t%s%s\n\t\t%s]\n\t%s},",
+          indent,
+          indent,
+          key,
+          indent,
+          left.toString(level + 1),
+          indent,
+          right.toString(level + 1),
+          indent,
+          indent);
+    } else {
+      return String.format("%s{ %s: %s },", indent, key, value);
+    }
   }
 }

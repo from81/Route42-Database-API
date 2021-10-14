@@ -22,6 +22,10 @@ public class Tokenizer {
     this.query = query;
   }
 
+  public static List<Token> tokenizeQuery(String text) {
+    return new Tokenizer(text).tokenize();
+  }
+
   private List<Token> tokenize() {
     return fixTokens(extractTokens(this.query));
   }
@@ -77,28 +81,5 @@ public class Tokenizer {
           finalTokens.add(token);
         });
     return finalTokens;
-  }
-
-  public static List<Token> tokenizeQuery(String text) {
-    return new Tokenizer(text).tokenize();
-  }
-
-  public static void main(String[] args) {
-    List<String> strs = new ArrayList<>();
-    strs.add("username: xxxx hashtags: #hashtag #android #app");
-    strs.add("username: xxxx or hashtags: #hashtag #android #app");
-    strs.add("(username: xxxx or hashtags: #hashtag #android #app) username: test_user");
-    strs.add(
-        "(username: moniquechan and hashtags: #love #instarunners #triathlon) or username: miranda45");
-
-    strs.forEach(
-        s -> {
-          System.out.println("raw str: " + s);
-          List<Token> tokens = Tokenizer.tokenizeQuery(s);
-          QueryTreeNode node = QueryTreeNode.fromTokens(tokens);
-          tokens.forEach(System.out::println);
-          System.out.println(node);
-          System.out.println();
-        });
   }
 }

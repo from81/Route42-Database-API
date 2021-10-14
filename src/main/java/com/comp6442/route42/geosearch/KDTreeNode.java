@@ -10,10 +10,10 @@ import java.util.List;
 public class KDTreeNode extends GeoPoint {
   private KDTreeNode left = null;
   private KDTreeNode right = null;
-  private Double[] coords = new Double[2];
+  private final Double[] coords = new Double[2];
   private Post post;
 
-  public KDTreeNode(double latitude, double longitude)  {
+  public KDTreeNode(double latitude, double longitude) {
     super(latitude, longitude);
     this.coords[0] = longitude;
     this.coords[1] = latitude;
@@ -24,6 +24,22 @@ public class KDTreeNode extends GeoPoint {
     this.post = post;
   }
 
+  public static KDTreeNode fromNodes(List<KDTreeNode> nodes, int begin, int end, int index) {
+    if (end <= begin) {
+      return null;
+    }
+    int n = begin + (end - begin) / 2;
+    KDTreeNode node = QuickSelect.select(nodes, begin, end - 1, n, new NodeComparator(index));
+    index = (index + 1) % 2;
+    node.setLeft(fromNodes(nodes, begin, n, index));
+    node.setRight(fromNodes(nodes, n + 1, end, index));
+    return node;
+  }
+
+  public static KDTreeNode fromPost(Post post) {
+    return new KDTreeNode(post);
+  }
+
   public Double getCoordValue(int idx) {
     return this.coords[idx];
   }
@@ -32,8 +48,16 @@ public class KDTreeNode extends GeoPoint {
     return left;
   }
 
+  public void setLeft(KDTreeNode left) {
+    this.left = left;
+  }
+
   public KDTreeNode getRight() {
     return right;
+  }
+
+  public void setRight(KDTreeNode right) {
+    this.right = right;
   }
 
   public Post getPost() {
@@ -42,14 +66,6 @@ public class KDTreeNode extends GeoPoint {
 
   public void setPost(Post post) {
     this.post = post;
-  }
-
-  public void setLeft(KDTreeNode left) {
-    this.left = left;
-  }
-
-  public void setRight(KDTreeNode right) {
-    this.right = right;
   }
 
   @Nonnull
@@ -75,28 +91,15 @@ public class KDTreeNode extends GeoPoint {
 
     double dLat = Math.toRadians(other.getLatitude() - this.getLatitude());
     double dLng = Math.toRadians(other.getLongitude() - this.getLongitude());
-    double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-            Math.cos(Math.toRadians(this.getLatitude())) * Math.cos(Math.toRadians(other.getLatitude())) *
-                    Math.sin(dLng/2) * Math.sin(dLng/2);
-    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    double a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2)
+            + Math.cos(Math.toRadians(this.getLatitude()))
+                * Math.cos(Math.toRadians(other.getLatitude()))
+                * Math.sin(dLng / 2)
+                * Math.sin(dLng / 2);
+    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     double dist = earthRadius * c;
     return dist * meterConversion;
-  }
-
-  public static KDTreeNode fromNodes(List<KDTreeNode> nodes, int begin, int end, int index) {
-    if (end <= begin) {
-      return null;
-    }
-    int n = begin + (end - begin) / 2;
-    KDTreeNode node = QuickSelect.select(nodes, begin, end - 1, n, new NodeComparator(index));
-    index = (index + 1) % 2;
-    node.setLeft(fromNodes(nodes, begin, n, index));
-    node.setRight(fromNodes(nodes, n + 1, end, index));
-    return node;
-  }
-
-  public static KDTreeNode fromPost(Post post) {
-    return new KDTreeNode(post);
   }
 
   public static class NodeComparator implements Comparator<KDTreeNode> {

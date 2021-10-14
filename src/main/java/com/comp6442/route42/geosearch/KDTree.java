@@ -21,6 +21,16 @@ public class KDTree {
     this.rootNode = node;
   }
 
+  public static KDTree fromNodes(List<KDTreeNode> nodes) {
+    if (nodes.size() == 0) return null;
+    KDTreeNode node = KDTreeNode.fromNodes(nodes, 0, nodes.size(), 0);
+    return new KDTree(node);
+  }
+
+  public static KDTree fromPosts(List<Post> posts) {
+    return fromNodes(posts.stream().map(KDTreeNode::fromPost).collect(Collectors.toList()));
+  }
+
   public List<KDTreeNode> findKNearest(int k, KDTreeNode node) {
     return findKNearest(k, node.getLatitude(), node.getLongitude());
   }
@@ -52,7 +62,8 @@ public class KDTree {
           double diff = root.getCoordValue(index) - target.getCoordValue(index);
           index = (index + 1) % 2;
           searchKNearest(diff > 0 ? root.getLeft() : root.getRight(), target, index);
-          if (Math.sqrt(diff * diff) >= Math.max(bestDistance, kbestDistances.get(kbestNodes.size() - 1))) {
+          if (Math.sqrt(diff * diff)
+              >= Math.max(bestDistance, kbestDistances.get(kbestNodes.size() - 1))) {
             return;
           }
           searchKNearest(diff > 0 ? root.getRight() : root.getLeft(), target, index);
@@ -84,16 +95,6 @@ public class KDTree {
 
   public double getKBestDistance(int index) {
     return kbestDistances.get(index);
-  }
-
-  public static KDTree fromNodes(List<KDTreeNode> nodes) {
-    if (nodes.size() == 0) return null;
-    KDTreeNode node = KDTreeNode.fromNodes(nodes, 0, nodes.size(), 0);
-    return new KDTree(node);
-  }
-
-  public static KDTree fromPosts(List<Post> posts){
-    return fromNodes(posts.stream().map(KDTreeNode::fromPost).collect(Collectors.toList()));
   }
 
   public String toString() {

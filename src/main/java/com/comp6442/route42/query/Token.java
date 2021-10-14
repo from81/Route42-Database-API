@@ -9,14 +9,6 @@ public class Token {
     this.value = value;
   }
 
-  public TokenType getType() {
-    return tokenType;
-  }
-
-  public String getValue() {
-    return value;
-  }
-
   public static Token parseToken(String text) {
     text = text.replaceAll("\\s+and|\\s+AND", "");
     text = text.replaceAll("\\s+or|\\s+OR", "");
@@ -30,6 +22,14 @@ public class Token {
       if (text.contains(":")) return new Token(TokenType.FILTER, text);
       else return new Token(TokenType.FILTER, String.format("hashtags:%s", text));
     }
+  }
+
+  public TokenType getType() {
+    return tokenType;
+  }
+
+  public String getValue() {
+    return value;
   }
 
   @Override
