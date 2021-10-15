@@ -173,6 +173,10 @@ public class KDTree {
     return rbestDistances.get(index);
   }
 
+  public int countNodes(){
+    return this.rootNode.countNodes();
+  }
+
   public String toString() {
     return this.rootNode.toString();
   }

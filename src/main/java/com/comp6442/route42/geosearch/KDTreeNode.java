@@ -24,6 +24,17 @@ public class KDTreeNode extends GeoPoint {
     this.post = post;
   }
 
+  public int countNodes() {
+    int counts = 1;
+    if(this.left != null){
+      counts += this.left.countNodes();
+    }
+    if(this.right != null){
+      counts += this.right.countNodes();
+    }
+    return counts;
+  }
+
   public static KDTreeNode fromNodes(List<KDTreeNode> nodes, int begin, int end, int index) {
     if (end <= begin) {
       return null;
