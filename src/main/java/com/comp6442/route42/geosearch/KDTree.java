@@ -114,7 +114,7 @@ public class KDTree {
       bestNode = null;
     }
     if(rbestNodes.size()!=0){
-      while(rbestDistances.get(rbestDistances.size()-1) <= (Double)r){
+      while(rbestDistances.get(rbestDistances.size()-1) <= (Double)r && rbestNodes.size() < nodeCounts){
         searchRNearest(rootNode, target, 0);
         rbestDistances.add(bestDistance);
         rbestNodes.add(bestNode);

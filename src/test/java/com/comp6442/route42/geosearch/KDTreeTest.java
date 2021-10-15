@@ -148,15 +148,15 @@ public class KDTreeTest {
             i++;
         }
 
-//        radius = 1000000f;
-//        target = generateTarget();
-//        withinRadiusNodes = tree.findWithinRadius(radius, target.getLatitude(),target.getLongitude());
-//        i = 0;
-//        for(KDTreeNode withinRadiusNode : withinRadiusNodes){
-//            System.out.println(" " + i + "-th within radius node : " + withinRadiusNode + " distance : " + tree.getRBestDistance(i) + " within radius " + radius);
-//            Assertions.assertTrue(withinRadiusNode.getDistanceTo(target) <= radius, "Bigger than Radius");
-//            i++;
-//        }
+        radius = 1000000f;
+        target = generateTarget();
+        withinRadiusNodes = tree.findWithinRadius(radius, target.getLatitude(),target.getLongitude());
+        i = 0;
+        for(KDTreeNode withinRadiusNode : withinRadiusNodes){
+            System.out.println(" " + i + "-th within radius node : " + withinRadiusNode + " distance : " + tree.getRBestDistance(i) + " within radius " + radius);
+            Assertions.assertTrue(withinRadiusNode.getDistanceTo(target) <= radius, "Bigger than Radius");
+            i++;
+        }
     }
 
     public static List<KDTreeNode> generateNodes(int points) {
