@@ -1,17 +1,21 @@
 package com.comp6442.route42.query;
 
+import static com.comp6442.route42.query.Token.TokenType.AND;
+import static com.comp6442.route42.query.Token.TokenType.FILTER;
+import static com.comp6442.route42.query.Token.TokenType.LBRA;
+import static com.comp6442.route42.query.Token.TokenType.OR;
+import static com.comp6442.route42.query.Token.TokenType.RBRA;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.comp6442.route42.query.Token.TokenType.*;
-
 public class Tokenizer {
   /**
-   * @param query RESTRICTIONS - $and is the default connector between expressions
+   * @param query RESTRICTIONS - $or is the default connector between expressions
    *     <p>EXAMPLES "test" becomes {$hashtags: ["#test"]}
-   *     <p>"username: xxxx hashtags: #hashtag #android #app" becomes {$and: [ {"username": "xxx"},
+   *     <p>"username: xxxx hashtags: #hashtag #android #app" becomes {$or: [ {"username": "xxx"},
    *     {"hashtags": ["#hashtag", "#android", "#app"]}, ] }
    *     <p>"username: xxxx or hashtags: #hashtag #android #app" becomes {$or: [ {$userName: "xxx"},
    *     {$hashtags: ["#hashtag", "#android", "#app"]} ]}
@@ -74,9 +78,9 @@ public class Tokenizer {
             Token lastItem = finalTokens.get(finalTokens.size() - 1);
             if (lastItem.getType() == RBRA
                 && (token.getType() == LBRA || token.getType() == FILTER))
-              finalTokens.add(new Token(AND, "AND"));
+              finalTokens.add(new Token(OR, "OR"));
             else if (lastItem.getType() == FILTER && token.getType() == FILTER)
-              finalTokens.add(new Token(AND, "AND"));
+              finalTokens.add(new Token(OR, "OR"));
           }
           finalTokens.add(token);
         });
