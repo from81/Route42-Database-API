@@ -53,6 +53,39 @@ public class KDTree {
     return kbestNodes;
   }
 
+  public List<KDTreeNode> findWithinRadius(double r, KDTreeNode node) {
+    return findWithinRadius(r, node.getLatitude(), node.getLongitude());
+  }
+
+  public List<KDTreeNode> findWithinRadius(double r, double lat, double lon) {
+    KDTreeNode target = new KDTreeNode(lat, lon);
+    if (rootNode == null) {
+      throw new IllegalStateException("Tree is Empty!");
+    }
+    kbestNodes = new ArrayList<>();
+    bestNode = null;
+    bestDistance = 0;
+    while(kbestNodes.size()==0){
+      searchKNearest(rootNode, target, 0);
+      kbestDistances.add(bestDistance);
+      kbestNodes.add(bestNode);
+      bestDistance = 0;
+      bestNode = null;
+      if(kbestNodes.size()!=0){
+        while(kbestDistances.get(kbestDistances.size()-1) <= (Double)r){
+          searchKNearest(rootNode, target, 0);
+          kbestDistances.add(bestDistance);
+          kbestNodes.add(bestNode);
+          bestDistance = 0;
+          bestNode = null;
+        }
+//        kbestDistances.remove(kbestDistances.size()-1);
+//        kbestNodes.remove(kbestNodes.size()-1);
+      }
+    }
+    return kbestNodes;
+  }
+
   private void searchKNearest(KDTreeNode root, KDTreeNode target, int index) {
     if (root == null) return;
     double d = root.getDistanceTo(target);

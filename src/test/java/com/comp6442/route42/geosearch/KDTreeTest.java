@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.util.Random;
 
+import static org.junit.Assert.assertEquals;
+
 public class KDTreeTest {
 
     @Test
@@ -86,6 +88,30 @@ public class KDTreeTest {
         for(KDTreeNode nearest_node : nearest_nodes){
             System.out.println(" " + i + "-th nearest neighbor node : " + nearest_node + " distance : " + tree.getKBestDistance(i));
             Assertions.assertEquals(nearest_node.getDistanceTo(target), tree.getKBestDistance(i), 1e-8, "Wrong Coordinate");
+            i++;
+        }
+    }
+
+    @org.junit.Test
+    public void testFindWithinRadius() {
+        List<KDTreeNode> nodes = generateNodes(50);
+        KDTree tree = generateKDTree(nodes);
+        System.out.println(tree.display(0));
+
+        KDTreeNode target = generateTarget();
+        double radius = 0.25f;
+        int i = 0;
+        System.out.println(" target node : " + target);
+        for(KDTreeNode node : nodes){
+            System.out.println(" " + i + "-th node : " + node + " distance : " + node.getDistanceTo(target) + " within radius " + radius);
+            i++;
+        }
+
+        List<KDTreeNode> withinRadiusNodes = tree.findWithinRadius(radius, target.getLatitude(),target.getLongitude());
+        i = 0;
+        for(KDTreeNode withinRadiusNode : withinRadiusNodes){
+            System.out.println(" " + i + "-th within radius node : " + withinRadiusNode + " distance : " + tree.getKBestDistance(i) + " within radius " + radius);
+            assertEquals("Wrong Coordinate", withinRadiusNode.getDistanceTo(target), tree.getKBestDistance(i), 1e-8);
             i++;
         }
     }
