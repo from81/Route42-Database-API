@@ -47,7 +47,7 @@ public class KDTree {
     kbestNodes = new ArrayList<>();
     bestNode = null;
     bestDistance = 0;
-    while (kbestNodes.size() < k) {
+    while (kbestNodes.size() < k && kbestNodes.size() < nodeCounts) {
       searchKNearest(rootNode, target, 0);
       kbestDistances.add(bestDistance);
       kbestNodes.add(bestNode);
