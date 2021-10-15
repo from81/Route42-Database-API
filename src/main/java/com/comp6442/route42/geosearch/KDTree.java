@@ -18,9 +18,11 @@ public class KDTree {
   private List<KDTreeNode> rbestNodes = new ArrayList<>();
   private KDTreeNode bestNode = null;
   private double bestDistance = 0;
+  private int nodeCounts = 0;
 
   public KDTree(KDTreeNode node) {
     this.rootNode = node;
+    this.nodeCounts = this.rootNode.countNodes();
   }
 
   public static KDTree fromNodes(List<KDTreeNode> nodes) {
@@ -175,6 +177,10 @@ public class KDTree {
 
   public int countNodes(){
     return this.rootNode.countNodes();
+  }
+
+  public int getNodeCounts(){
+    return this.nodeCounts;
   }
 
   public String toString() {

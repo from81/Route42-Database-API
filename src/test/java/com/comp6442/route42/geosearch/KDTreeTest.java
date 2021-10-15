@@ -17,6 +17,10 @@ public class KDTreeTest {
         nodes = generateNodes(100);
         tree = generateKDTree(nodes);
         Assertions.assertEquals(100,tree.countNodes());
+
+        nodes = generateNodes(1000);
+        tree = generateKDTree(nodes);
+        Assertions.assertEquals(tree.getNodeCounts(),tree.countNodes());
     }
 
     @Test
