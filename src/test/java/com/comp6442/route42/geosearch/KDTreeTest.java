@@ -132,7 +132,7 @@ public class KDTreeTest {
         System.out.println(tree.display(0));
 
         KDTreeNode target = generateTarget();
-        double radius = 30000f;
+        double radius = -1.0f;
         int i = 0;
         System.out.println(" target node : " + target);
         for(KDTreeNode node : nodes){
@@ -141,6 +141,18 @@ public class KDTreeTest {
         }
 
         List<KDTreeNode> withinRadiusNodes = tree.findWithinRadius(radius, target.getLatitude(),target.getLongitude());
+        Assertions.assertTrue(withinRadiusNodes.isEmpty(), "Not Empty");
+
+
+        radius = 30000f;
+        i = 0;
+        System.out.println(" target node : " + target);
+        for(KDTreeNode node : nodes){
+            System.out.println(" " + i + "-th node : " + node + " distance : " + node.getDistanceTo(target) + " within radius " + radius);
+            i++;
+        }
+
+        withinRadiusNodes = tree.findWithinRadius(radius, target.getLatitude(),target.getLongitude());
         i = 0;
         for(KDTreeNode withinRadiusNode : withinRadiusNodes){
             System.out.println(" " + i + "-th within radius node : " + withinRadiusNode + " distance : " + tree.getRBestDistance(i) + " within radius " + radius);
