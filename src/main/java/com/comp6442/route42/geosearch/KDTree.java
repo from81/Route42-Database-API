@@ -65,23 +65,23 @@ public class KDTree {
     kbestNodes = new ArrayList<>();
     bestNode = null;
     bestDistance = 0;
-    while(kbestNodes.size()==0){
-      searchKNearest(rootNode, target, 0);
+    searchKNearest(rootNode, target, 0);
+    if(bestDistance <= (Double)r){
       kbestDistances.add(bestDistance);
       kbestNodes.add(bestNode);
       bestDistance = 0;
       bestNode = null;
-      if(kbestNodes.size()!=0){
-        while(kbestDistances.get(kbestDistances.size()-1) <= (Double)r){
-          searchKNearest(rootNode, target, 0);
-          kbestDistances.add(bestDistance);
-          kbestNodes.add(bestNode);
-          bestDistance = 0;
-          bestNode = null;
-        }
-//        kbestDistances.remove(kbestDistances.size()-1);
-//        kbestNodes.remove(kbestNodes.size()-1);
+    }
+    if(kbestNodes.size()!=0){
+      while(kbestDistances.get(kbestDistances.size()-1) <= (Double)r){
+        searchKNearest(rootNode, target, 0);
+        kbestDistances.add(bestDistance);
+        kbestNodes.add(bestNode);
+        bestDistance = 0;
+        bestNode = null;
       }
+      kbestDistances.remove(kbestDistances.size()-1);
+      kbestNodes.remove(kbestNodes.size()-1);
     }
     return kbestNodes;
   }

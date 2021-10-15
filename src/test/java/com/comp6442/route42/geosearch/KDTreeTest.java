@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.util.Random;
 
-import static org.junit.Assert.assertEquals;
-
 public class KDTreeTest {
 
     @Test
@@ -99,7 +97,7 @@ public class KDTreeTest {
         System.out.println(tree.display(0));
 
         KDTreeNode target = generateTarget();
-        double radius = 0.25f;
+        double radius = 30000f;
         int i = 0;
         System.out.println(" target node : " + target);
         for(KDTreeNode node : nodes){
@@ -111,9 +109,18 @@ public class KDTreeTest {
         i = 0;
         for(KDTreeNode withinRadiusNode : withinRadiusNodes){
             System.out.println(" " + i + "-th within radius node : " + withinRadiusNode + " distance : " + tree.getKBestDistance(i) + " within radius " + radius);
-            assertEquals("Wrong Coordinate", withinRadiusNode.getDistanceTo(target), tree.getKBestDistance(i), 1e-8);
+            Assertions.assertTrue(withinRadiusNode.getDistanceTo(target) <= radius, "Bigger than Radius");
             i++;
         }
+
+//        radius = 100000;
+//        withinRadiusNodes = tree.findWithinRadius(radius, target.getLatitude(),target.getLongitude());
+//        i = 0;
+//        for(KDTreeNode withinRadiusNode : withinRadiusNodes){
+//            System.out.println(" " + i + "-th within radius node : " + withinRadiusNode + " distance : " + tree.getKBestDistance(i) + " within radius " + radius);
+//            Assertions.assertTrue(withinRadiusNode.getDistanceTo(target) <= radius, "Bigger than Radius");
+//            i++;
+//        }
     }
 
     public static List<KDTreeNode> generateNodes(int points) {
