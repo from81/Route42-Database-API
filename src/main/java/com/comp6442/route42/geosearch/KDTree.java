@@ -39,6 +39,16 @@ public class KDTree {
     return findKNearest(k, node.getLatitude(), node.getLongitude());
   }
 
+  /**
+   * This methods searches list of nodes of 1st to k-th closest from the target (lat, lon)
+   * It stops search when kbestNodes.size() = k or kbestNodes.size() = nodeCounts
+   * kbestDistances stores from 1st to k-th bestDistance from the target of KDTree
+   * kbestNodes stores from 1st to k-th bestNodes from the target of KDTree
+   * @param k
+   * @param lat
+   * @param lon
+   * @return List<KDTreeNode> kbestNodes
+   */
   public List<KDTreeNode> findKNearest(int k, double lat, double lon) {
     KDTreeNode target = new KDTreeNode(lat, lon);
     if (rootNode == null) {
@@ -58,11 +68,8 @@ public class KDTree {
   }
 
   /**
-   * This method is used for findKNearest method
-   * kbestDistances stores from 1st to k-th bestDistance from the target of KDTree
-   * kbestNodes stores from 1st to k-th bestNodes from the target of KDTree
+   * This is a helper method used for findKNearest method
    * searchKNearest method skips all bestDistances smaller than kbestDistances and adds next bestDistances
-   * findKNearest method stops search when kbestNodes.size() = k or kbestNodes.size() = nodeCounts
    * @param root
    * @param target
    * @param index
@@ -103,11 +110,21 @@ public class KDTree {
     searchKNearest(diff > 0 ? root.getRight() : root.getLeft(), target, index);
   }
 
-  public List<KDTreeNode> findWithinRadius(double r, KDTreeNode node) {
-    return findWithinRadius(r, node.getLatitude(), node.getLongitude());
+  public List<KDTreeNode> findWithinRadius(double radius, KDTreeNode node) {
+    return findWithinRadius(radius, node.getLatitude(), node.getLongitude());
   }
 
-  public List<KDTreeNode> findWithinRadius(double r, double lat, double lon) {
+  /**
+   * This methods searches list of nodes of within radius from the target (lat, lon)
+   * It stops search when newest bestDistance is larger than given radius or rbestNodes.size() = nodeCounts
+   * rbestDistances stores from 1st to r-th bestDistance where all distances are within given radius from the target of KDTree
+   * rbestNodes stores from 1st to r-th bestNodes where all nodes are within given radius from the target of KDTree
+   * @param radius
+   * @param lat
+   * @param lon
+   * @return List<KDTreeNode> rbestNodes
+   */
+  public List<KDTreeNode> findWithinRadius(double radius, double lat, double lon) {
     KDTreeNode target = new KDTreeNode(lat, lon);
     if (rootNode == null) {
       throw new IllegalStateException("Tree is Empty!");
@@ -119,7 +136,7 @@ public class KDTree {
     bestDistance = 0;
     searchRNearest(rootNode, target, 0);
 
-    if (bestDistance <= r) {
+    if (bestDistance <= radius) {
       rbestDistances.add(bestDistance);
       rbestNodes.add(bestNode);
       bestDistance = 0;
@@ -127,7 +144,7 @@ public class KDTree {
     }
 
     if (rbestNodes.size() != 0) {
-      while (rbestDistances.get(rbestDistances.size() - 1) <= (Double) r
+      while (rbestDistances.get(rbestDistances.size() - 1) <= (Double) radius
           && rbestNodes.size() < nodeCounts) {
         searchRNearest(rootNode, target, 0);
         rbestDistances.add(bestDistance);
@@ -142,11 +159,8 @@ public class KDTree {
   }
 
   /**
-   * This method is used for findWithinRadius method
-   * rbestDistances stores from 1st to r-th bestDistance where all distances are within given radius from the target of KDTree
-   * rbestNodes stores from 1st to r-th bestNodes where all nodes are within given radius from the target of KDTree
+   * This is a helper method used for findWithinRadius method
    * searchRNearest method skips all bestDistances smaller than rbestDistances and adds next bestDistances
-   * findWithinRadius method stops search when newest bestDistance is larger than given radius or rbestNodes.size() = nodeCounts
    * @param root
    * @param target
    * @param index
