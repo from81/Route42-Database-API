@@ -132,12 +132,12 @@ public class KDTree {
         if ((Double) d <= pairs.get(pairs.size() - 1).getDistance()) {
           double diff = root.getCoordValue(index) - target.getCoordValue(index);
           index = (index + 1) % 2;
-          searchKNearest(diff > 0 ? root.getLeft() : root.getRight(), target, index);
+          searchNearestEXP(diff > 0 ? root.getLeft() : root.getRight(), target, index);
           if (Math.sqrt(diff * diff)
                   >= Math.max(bestDistance, pairs.get(pairs.size() - 1).getDistance())) {
             return;
           }
-          searchKNearest(diff > 0 ? root.getRight() : root.getLeft(), target, index);
+          searchNearestEXP(diff > 0 ? root.getRight() : root.getLeft(), target, index);
           return;
         } else {
           bestDistance = d;
@@ -153,11 +153,11 @@ public class KDTree {
     }
     double diff = root.getCoordValue(index) - target.getCoordValue(index);
     index = (index + 1) % 2;
-    searchKNearest(diff > 0 ? root.getLeft() : root.getRight(), target, index);
+    searchNearestEXP(diff > 0 ? root.getLeft() : root.getRight(), target, index);
     if (Math.sqrt(diff * diff) >= bestDistance) {
       return;
     }
-    searchKNearest(diff > 0 ? root.getRight() : root.getLeft(), target, index);
+    searchNearestEXP(diff > 0 ? root.getRight() : root.getLeft(), target, index);
   }
 
   public List<KDTreeNode> findWithinRadius(double radius, KDTreeNode node) {
