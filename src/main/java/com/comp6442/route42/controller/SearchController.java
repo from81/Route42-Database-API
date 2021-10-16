@@ -3,6 +3,7 @@ package com.comp6442.route42.controller;
 import com.comp6442.route42.exception.ResourceNotFoundException;
 import com.comp6442.route42.geosearch.KDTree;
 import com.comp6442.route42.geosearch.KDTreeNode;
+import com.comp6442.route42.geosearch.Pair;
 import com.comp6442.route42.model.Post;
 import com.comp6442.route42.model.QueryString;
 import com.comp6442.route42.query.QueryTreeNode;
@@ -61,7 +62,8 @@ public class SearchController {
           @RequestParam(defaultValue = "1", value = "k") int k) throws ExecutionException, InterruptedException {
     logger.log(Level.INFO, String.format("GET/search/knn: k=%d lat=%f lon=%f", k, lat, lon));
     KDTree tree = KDTree.fromPosts(postService.getMany(200));
-    List<KDTreeNode> knn = tree.findKNearest(k, lat, lon);
+    List<Pair<KDTreeNode,Double>> knnPairs = tree.findKNearest(k, lat, lon);
+    List<KDTreeNode> knn = knnPairs.stream().map(Pair<KDTreeNode,Double>::getNode).collect(Collectors.toList());
     List<Post> posts = knn.stream().map(KDTreeNode::getPost).collect(Collectors.toList());
     return new ResponseEntity<>(posts, HttpStatus.OK);
   }

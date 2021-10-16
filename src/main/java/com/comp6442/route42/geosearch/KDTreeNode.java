@@ -24,20 +24,11 @@ public class KDTreeNode extends GeoPoint {
     this.post = post;
   }
 
-  public static KDTreeNode fromNodes(List<KDTreeNode> nodes, int begin, int end, int index) {
-    if (end <= begin) {
-      return null;
-    }
-    int n = begin + (end - begin) / 2;
-    KDTreeNode node = QuickSelect.select(nodes, begin, end - 1, n, new NodeComparator(index));
-    index = (index + 1) % 2;
-    node.setLeft(fromNodes(nodes, begin, n, index));
-    node.setRight(fromNodes(nodes, n + 1, end, index));
-    return node;
-  }
-
-  public static KDTreeNode fromPost(Post post) {
-    return new KDTreeNode(post);
+  public int countNodes() {
+    if (left != null && right != null) return 1 + left.countNodes() + right.countNodes();
+    else if (left != null) return 1 + left.countNodes();
+    else if (right != null) return 1 + right.countNodes();
+    else return 1;
   }
 
   public Double getCoordValue(int idx) {
@@ -91,9 +82,8 @@ public class KDTreeNode extends GeoPoint {
 
     double dLat = Math.toRadians(other.getLatitude() - this.getLatitude());
     double dLng = Math.toRadians(other.getLongitude() - this.getLongitude());
-    double a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2)
-            + Math.cos(Math.toRadians(this.getLatitude()))
+    double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+             + Math.cos(Math.toRadians(this.getLatitude()))
                 * Math.cos(Math.toRadians(other.getLatitude()))
                 * Math.sin(dLng / 2)
                 * Math.sin(dLng / 2);
@@ -113,5 +103,21 @@ public class KDTreeNode extends GeoPoint {
     public int compare(KDTreeNode node1, KDTreeNode node2) {
       return Double.compare(node1.getCoordValue(index), node2.getCoordValue(index));
     }
+  }
+
+  public static KDTreeNode fromNodes(List<KDTreeNode> nodes, int begin, int end, int index) {
+    if (end <= begin) {
+      return null;
+    }
+    int n = begin + (end - begin) / 2;
+    KDTreeNode node = QuickSelect.select(nodes, begin, end - 1, n, new NodeComparator(index));
+    index = (index + 1) % 2;
+    node.setLeft(fromNodes(nodes, begin, n, index));
+    node.setRight(fromNodes(nodes, n + 1, end, index));
+    return node;
+  }
+
+  public static KDTreeNode fromPost(Post post) {
+    return new KDTreeNode(post);
   }
 }
