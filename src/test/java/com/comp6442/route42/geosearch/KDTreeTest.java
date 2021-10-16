@@ -2,7 +2,6 @@ package com.comp6442.route42.geosearch;
 
 import org.junit.jupiter.api.*;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
