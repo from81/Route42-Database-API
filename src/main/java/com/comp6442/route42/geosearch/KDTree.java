@@ -57,6 +57,16 @@ public class KDTree {
     return kbestNodes;
   }
 
+  /**
+   * This method is used for findKNearest method
+   * kbestDistances stores from 1st to k-th bestDistance from the target of KDTree
+   * kbestNodes stores from 1st to k-th bestNodes from the target of KDTree
+   * searchKNearest method skips all bestDistances smaller than kbestDistances and adds next bestDistances
+   * findKNearest method stops search when kbestNodes.size() = k or kbestNodes.size() = nodeCounts
+   * @param root
+   * @param target
+   * @param index
+   */
   private void searchKNearest(KDTreeNode root, KDTreeNode target, int index) {
     if (root == null) return;
     double d = root.getDistanceTo(target);
@@ -131,6 +141,16 @@ public class KDTree {
     return rbestNodes;
   }
 
+  /**
+   * This method is used for findWithinRadius method
+   * rbestDistances stores from 1st to r-th bestDistance where all distances are within given radius from the target of KDTree
+   * rbestNodes stores from 1st to r-th bestNodes where all nodes are within given radius from the target of KDTree
+   * searchRNearest method skips all bestDistances smaller than rbestDistances and adds next bestDistances
+   * findWithinRadius method stops search when newest bestDistance is larger than given radius or rbestNodes.size() = nodeCounts
+   * @param root
+   * @param target
+   * @param index
+   */
   private void searchRNearest(KDTreeNode root, KDTreeNode target, int index) {
     if (root == null) return;
     double d = root.getDistanceTo(target);
