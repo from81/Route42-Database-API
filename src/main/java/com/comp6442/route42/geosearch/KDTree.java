@@ -112,30 +112,29 @@ public class KDTree {
     }
 
     k = Math.min(k, this.countNodes());
-    kbestNodes = new ArrayList<>();
+    pairs = new ArrayList<>();
     bestNode = null;
     bestDistance = 0;
-    while (kbestNodes.size() < k) {
-      searchKNearest(rootNode, target, 0);
-      kbestDistances.add(bestDistance);
-      kbestNodes.add(bestNode);
+    while (pairs.size() < k) {
+      searchNearestEXP(rootNode, target, 0);
+      pairs.add(new Pair<>(bestNode, bestDistance));
       bestDistance = 0;
       bestNode = null;
     }
     return pairs;
   }
 
-  private void searchKNearestEXP(KDTreeNode root, KDTreeNode target, int index) {
+  private void searchNearestEXP(KDTreeNode root, KDTreeNode target, int index) {
     if (root == null) return;
     double d = root.getDistanceTo(target);
     if (bestNode == null || d < bestDistance) {
-      if (kbestDistances.size() != 0) {
-        if ((Double) d <= kbestDistances.get(kbestNodes.size() - 1)) {
+      if (pairs.size() != 0) {
+        if ((Double) d <= pairs.get(pairs.size() - 1).getDistance()) {
           double diff = root.getCoordValue(index) - target.getCoordValue(index);
           index = (index + 1) % 2;
           searchKNearest(diff > 0 ? root.getLeft() : root.getRight(), target, index);
           if (Math.sqrt(diff * diff)
-                  >= Math.max(bestDistance, kbestDistances.get(kbestNodes.size() - 1))) {
+                  >= Math.max(bestDistance, pairs.get(pairs.size() - 1).getDistance())) {
             return;
           }
           searchKNearest(diff > 0 ? root.getRight() : root.getLeft(), target, index);
@@ -253,12 +252,65 @@ public class KDTree {
     searchRNearest(diff > 0 ? root.getRight() : root.getLeft(), target, index);
   }
 
+  public List<Pair<KDTreeNode, Double>> findWithinRadiusEXP(double radius, KDTreeNode node) {
+    return findWithinRadiusEXP(radius, node.getLatitude(), node.getLongitude());
+  }
+
+  /**
+   * This methods searches list of nodes of within radius from the target (lat, lon)
+   * It stops search when newest bestDistance is larger than given radius or rbestNodes.size() = nodeCounts
+   * rbestDistances stores from 1st to r-th bestDistance where all distances are within given radius from the target of KDTree
+   * rbestNodes stores from 1st to r-th bestNodes where all nodes are within given radius from the target of KDTree
+   * @param radius
+   * @param lat
+   * @param lon
+   * @return List<KDTreeNode> rbestNodes
+   */
+  public List<Pair<KDTreeNode, Double>> findWithinRadiusEXP(double radius, double lat, double lon) {
+    KDTreeNode target = new KDTreeNode(lat, lon);
+    if (rootNode == null) {
+      throw new IllegalStateException("Tree is Empty!");
+    }
+
+    pairs = new ArrayList<>();
+    bestNode = null;
+    bestDistance = 0;
+    searchNearestEXP(rootNode, target, 0);
+
+    if (bestDistance <= radius) {
+      pairs.add(new Pair<>(bestNode, bestDistance));
+      bestDistance = 0;
+      bestNode = null;
+    }
+
+    int nodeCounts = this.rootNode.countNodes();
+    if (pairs.size() != 0) {
+      while (pairs.get(pairs.size() - 1).getDistance() <= (Double) radius
+              && pairs.size() < nodeCounts) {
+        searchNearestEXP(rootNode, target, 0);
+        pairs.add(new Pair<>(bestNode, bestDistance));
+        bestDistance = 0;
+        bestNode = null;
+      }
+      pairs.remove(pairs.size()-1);
+    }
+    return pairs;
+  }
+
   public double getBestDistance() {
     return kbestDistances.get(0);
   }
 
   public double getKBestDistance(int index) {
     return kbestDistances.get(index);
+  }
+
+  public double getBestDistanceEXP() {
+    return pairs.get(0).getDistance();
+  }
+
+  public double getKBestDistanceEXP(int index) {
+    return pairs.get(index).getDistance();
   }
 
   public int countNodes() {
