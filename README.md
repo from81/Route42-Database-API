@@ -17,7 +17,7 @@ Warning
 ### Run Locally
 Run REST API locally on your machine, execute the following command in the terminal (if you're using Mac) inside the project root directory:
 ```
-GOOGLE_APPLICATION_CREDENTIALS=./google_application_credentials_route42.json ./gradlew bootRun
+FIRESTORE_EMULATOR_HOST=localhost:8080; GOOGLE_APPLICATION_CREDENTIALS=./google_application_credentials_route42.json ./gradlew bootRun
 ```
 
 ## Test REST API

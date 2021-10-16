@@ -22,6 +22,7 @@ public class Post extends Model implements Serializable {
   private String locationName;
   private Double latitude;
   private Double longitude;
+  private List<Point> route = new ArrayList<>();;
   private String geohash = "";
   private List<String> hashtags = new ArrayList<>();
   private int likeCount = 0;
@@ -41,6 +42,7 @@ public class Post extends Model implements Serializable {
       String locationName,
       Double latitude,
       Double longitude,
+      List<Point> route,
       List<String> hashtags,
       int likeCount,
       String imageUrl,
@@ -57,6 +59,7 @@ public class Post extends Model implements Serializable {
     this.locationName = locationName;
     this.latitude = latitude;
     this.longitude = longitude;
+    this.route = route;
     this.hashtags = hashtags;
     this.likeCount = likeCount;
     this.imageUrl = imageUrl;
@@ -132,6 +135,14 @@ public class Post extends Model implements Serializable {
     return longitude;
   }
 
+  public List<Point> getRoute() {
+    return route;
+  }
+
+  public void setRoute(List<Point> route) {
+    this.route = route;
+  }
+
   public void setLongitude(Double longitude) {
     this.longitude = longitude;
   }
@@ -179,52 +190,30 @@ public class Post extends Model implements Serializable {
     this.geohash = geohash;
   }
 
-  @NonNull
   @Override
   public String toString() {
-    String sb =
-        "Post{"
-            + "id='"
-            + id
-            + '\''
-            + ", uid="
-            + uid
-            + ", userName='"
-            + userName
-            + '\''
-            + ", isPublic="
-            + isPublic
-            + ", profilePicUrl='"
-            + profilePicUrl
-            + '\''
-            + ", postDatetime="
-            + postDatetime
-            + ", postDescription='"
-            + postDescription
-            + '\''
-            + ", locationName='"
-            + locationName
-            + '\''
-            + ", latitude="
-            + latitude
-            + ", longitude="
-            + longitude
-            + ", geohash='"
-            + geohash
-            + '\''
-            + ", hashtags="
-            + hashtags
-            + ", likeCount="
-            + likeCount
-            + ", imageUrl='"
-            + imageUrl
-            + '\''
-            + ", likedBy="
-            + likedBy
-            + '}';
-    return sb;
+    final StringBuilder sb = new StringBuilder("Post{");
+    sb.append("id='").append(id).append('\'');
+    sb.append(", uid=").append(uid);
+    sb.append(", userName='").append(userName).append('\'');
+    sb.append(", isPublic=").append(isPublic);
+    sb.append(", profilePicUrl='").append(profilePicUrl).append('\'');
+    sb.append(", postDatetime=").append(postDatetime);
+    sb.append(", postDescription='").append(postDescription).append('\'');
+    sb.append(", locationName='").append(locationName).append('\'');
+    sb.append(", latitude=").append(latitude);
+    sb.append(", longitude=").append(longitude);
+    sb.append(", route=").append(route);
+    sb.append(", geohash='").append(geohash).append('\'');
+    sb.append(", hashtags=").append(hashtags);
+    sb.append(", likeCount=").append(likeCount);
+    sb.append(", imageUrl='").append(imageUrl).append('\'');
+    sb.append(", likedBy=").append(likedBy);
+    sb.append('}');
+    return sb.toString();
   }
 
+  @NonNull
   @Override
   public boolean equals(Object obj) {
     if (this == obj) return true;
@@ -244,20 +233,6 @@ public class Post extends Model implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(
-        uid,
-        userName,
-        isPublic,
-        profilePicUrl,
-        postDatetime,
-        postDescription,
-        locationName,
-        latitude,
-        longitude,
-        geohash,
-        hashtags,
-        likeCount,
-        imageUrl,
-        likedBy);
+    return Objects.hash(uid, userName, isPublic, profilePicUrl, postDatetime, postDescription, locationName, latitude, longitude, route, geohash, hashtags, likeCount, imageUrl, likedBy);
   }
 }
