@@ -62,9 +62,8 @@ public class SearchController {
           @RequestParam(defaultValue = "1", value = "k") int k) throws ExecutionException, InterruptedException {
     logger.log(Level.INFO, String.format("GET/search/knn: k=%d lat=%f lon=%f", k, lat, lon));
     KDTree tree = KDTree.fromPosts(postService.getMany(200));
-    List<Pair<KDTreeNode,Double>> knnPairs = tree.findKNearestEXP(k, lat, lon);
+    List<Pair<KDTreeNode,Double>> knnPairs = tree.findKNearest(k, lat, lon);
     List<KDTreeNode> knn = knnPairs.stream().map(Pair<KDTreeNode,Double>::getNode).collect(Collectors.toList());
-//    List<KDTreeNode> knn = tree.findKNearest(k, lat, lon);
     List<Post> posts = knn.stream().map(KDTreeNode::getPost).collect(Collectors.toList());
     return new ResponseEntity<>(posts, HttpStatus.OK);
   }

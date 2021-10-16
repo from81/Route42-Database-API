@@ -63,10 +63,10 @@ public class KDTreeTest {
   public void testFindOneNearest() {
     for (int i=0; i < trees.size(); i++) {
 
-      Pair<KDTreeNode, Double> pairNode = trees.get(i).findKNearestEXP(1, target).get(0);
+      Pair<KDTreeNode, Double> pairNode = trees.get(i).findKNearest(1, target).get(0);
       Assertions.assertEquals(
               pairNode.getNode().getDistanceTo(target),
-              trees.get(i).getBestDistanceEXP(),
+              trees.get(i).getBestDistance(),
               1e-8,
               "Distance computation incorrect"
       );
@@ -79,12 +79,12 @@ public class KDTreeTest {
     for (int i=0; i < trees.size(); i++) {
       int k = sizes.get(i) / 2;
 
-      List<Pair<KDTreeNode, Double>> pairNodes = trees.get(i).findKNearestEXP(k, target);
+      List<Pair<KDTreeNode, Double>> pairNodes = trees.get(i).findKNearest(k, target);
 
       for (int j=0; j < k; j++) {
         Assertions.assertEquals(
                 pairNodes.get(j).getNode().getDistanceTo(target),
-                trees.get(i).getKBestDistanceEXP(j),
+                trees.get(i).getKBestDistance(j),
                 1e-8,
                 "Distance computation incorrect");
       }
@@ -97,7 +97,7 @@ public class KDTreeTest {
     for (int i=0; i < trees.size(); i++) {
       for (int j=0; j < radii.size(); j++) {
 
-        List<Pair<KDTreeNode, Double>> pairNodes = trees.get(i).findWithinRadiusEXP(radii.get(j), target);
+        List<Pair<KDTreeNode, Double>> pairNodes = trees.get(i).findWithinRadius(radii.get(j), target);
 
         // Distance calculation test
         for (int k = 0; k < pairNodes.size(); k++) {
