@@ -1,37 +1,31 @@
-## Getting started
-
-Make sure you have the following files
-
-- /settings.gradle
-- /-firebase-adminsdk-5s99m-cb8b011821.json
+## About
 
 Warning
-
-- Unlike the client side app, this REST API by default does not use the emulator (because I haven't configured it to use the emulator).
+- Unlike the client side app, this REST API by default does not use the emulator (because I haven't configured it to use the emulator). That means even if you run the REST API locally on your machine, it is still connecting to the firestore in the cloud, not emulator. Be careful about the [API limit](https://firebase.google.com/docs/firestore/quotas).
 - For hashtag queries, the API runs an ArrayContains for each individual hashtag, and performs a union over all results. 
-  - Please don't pass large amount of hashtags. For now, I've set a limit to 10 hashtags.
-  - But still, best not to use it too much so that we don't incur costs for the cloud infrastructure.
+  - Please do not pass a large number of hashtags. For now, the limit is set to 10 hashtags.
 
-## AWS EC2 
+## Run
 
-Public IPv4 DNS: `ec2-13-211-169-204.ap-southeast-2.compute.amazonaws.com`
-Public IPv4 address: `13.211.169.204`
+### Prerequisite
+1. Pull the latest version of our Android app from the `dev` branch.
+2. Go to package `com.comp6442.route42.api` and edit `RestApiService.java`.
+    1. In the line `String url = (BuildConfig.EMULATOR) ? "http://192.168.0.2:8080/" : "http://13.211.169.204:8080/";` the `192.168.0.2` part must be changed to your local IP address.
+    2. If you're using Mac, execute `ifconfig | grep "192.168."` in your terminal, and you will find your local IP address next to the word `inet` in the printed result.
+3. You are now ready to run the mobile app and connect it to a REST API running on your machine.
 
-## Testing Endpoints
-
-> You can only test the REST API locally. To deploy, create a merge request and owner of the repository will merge your branch once the merge request is approved.
-
-Run locally: (choose either command)
+### Run Locally
+Run REST API locally on your machine, execute the following command in the terminal (if you're using Mac) inside the project root directory:
 ```
 GOOGLE_APPLICATION_CREDENTIALS=./google_application_credentials_route42.json ./gradlew bootRun
-GOOGLE_APPLICATION_CREDENTIALS=./google_application_credentials_route42.json java -jar build/libs/Route42RestAPI-1.0-SNAPSHOT.jar
 ```
 
-Testing GET
+## Test REST API
 
+Testing GET (Try to test locally instead of using the production api)
 ```
 curl --request GET localhost:8080/post/0092827e-2961-48ed-8995-50adb9f47781
-curl --request GET http://13.211.169.204:8080/post/0092827e-2961-48ed-8995-50adb9f47781
+# curl --request GET http://13.211.169.204:8080/post/0092827e-2961-48ed-8995-50adb9f47781
 ```
 
 Testing POST request
@@ -56,3 +50,8 @@ curl --header "Content-Type: application/json" \
     --data '{"query":"(username: moniquechan and hashtags: #love #instarunners #triathlon) or username: miranda45"}' \
     http://13.211.169.204:8080/search
 ```
+
+## AWS EC2 instance (Production)
+
+- Public IPv4 DNS: `ec2-13-211-169-204.ap-southeast-2.compute.amazonaws.com`
+- Public IPv4 address: `13.211.169.204`
