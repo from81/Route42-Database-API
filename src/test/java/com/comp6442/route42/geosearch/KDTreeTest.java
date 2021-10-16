@@ -2,6 +2,7 @@ package com.comp6442.route42.geosearch;
 
 import org.junit.jupiter.api.*;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 public class KDTreeTest {
   private List<Integer> sizes = Arrays.asList(1, 5, 25, 50, 100);
+  private List<Double> radii = Arrays.asList(-1.0, 30000.0, 100000.0);
   private List<KDTree> trees = new ArrayList<>();
   private KDTreeNode target;
 
@@ -91,79 +93,18 @@ public class KDTreeTest {
   @Test
   @Timeout(value = 1000, unit = TimeUnit.MILLISECONDS)
   public void testFindWithinRadius() {
-    List<KDTreeNode> nodes = generateNodes(50);
-    KDTree tree = generateKDTree(nodes);
-    System.out.println(tree.display(0));
+    for (int i=0; i < trees.size(); i++) {
 
-    KDTreeNode target = generateKDTreeNode();
-    double radius = -1.0f;
-    int i = 0;
-    System.out.println(" target node : " + target);
-    for (KDTreeNode node : nodes) {
-      System.out.println(
-          " "
-              + i
-              + "-th node : "
-              + node
-              + " distance : "
-              + node.getDistanceTo(target)
-              + " within radius "
-              + radius);
-      i++;
-    }
+      for (int j=0; j < radii.size(); j++) {
+        List<KDTreeNode> nearestNodes = trees.get(i).findWithinRadius(radii.get(j), target);
 
-    List<KDTreeNode> withinRadiusNodes =
-        tree.findWithinRadius(radius, target.getLatitude(), target.getLongitude());
-    Assertions.assertTrue(withinRadiusNodes.isEmpty(), "Not Empty");
-
-    radius = 30000f;
-    i = 0;
-    System.out.println(" target node : " + target);
-    for (KDTreeNode node : nodes) {
-      System.out.println(
-          " "
-              + i
-              + "-th node : "
-              + node
-              + " distance : "
-              + node.getDistanceTo(target)
-              + " within radius "
-              + radius);
-      i++;
-    }
-
-    withinRadiusNodes = tree.findWithinRadius(radius, target.getLatitude(), target.getLongitude());
-    i = 0;
-    for (KDTreeNode withinRadiusNode : withinRadiusNodes) {
-      System.out.println(
-          " "
-              + i
-              + "-th within radius node : "
-              + withinRadiusNode
-              + " distance : "
-              + tree.getRBestDistance(i)
-              + " within radius "
-              + radius);
-      Assertions.assertTrue(withinRadiusNode.getDistanceTo(target) <= radius, "Bigger than Radius");
-      i++;
-    }
-
-    radius = 1000000f;
-    target = generateKDTreeNode();
-    withinRadiusNodes = tree.findWithinRadius(radius, target.getLatitude(), target.getLongitude());
-    i = 0;
-    for (KDTreeNode withinRadiusNode : withinRadiusNodes) {
-      System.out.println(
-          " "
-              + i
-              + "-th within radius node : "
-              + withinRadiusNode
-              + " distance : "
-              + tree.getRBestDistance(i)
-              + " within radius "
-              + radius);
-      Assertions.assertTrue(withinRadiusNode.getDistanceTo(target) <= radius, "Bigger than Radius");
-      i++;
+        // Distance calculation test
+        for (int k = 0; k < nearestNodes.size(); k++) {
+          Assertions.assertTrue(
+                  nearestNodes.get(k).getDistanceTo(target) <= radii.get(j),
+                  "Distance larger than radius");
+        }
+      }
     }
   }
 }
