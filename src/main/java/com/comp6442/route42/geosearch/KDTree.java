@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * KD_Tree class creates KD-Tree and search nearest points Reference and explanation for KD-Tree is
+ * KD_Tree class creates KD-Tree and search the nearest points Reference and explanation for KD-Tree is
  * at below https://rosettacode.org/wiki/K-d_tree#Java
  */
 public class KDTree {
@@ -18,21 +18,9 @@ public class KDTree {
   private List<KDTreeNode> rbestNodes = new ArrayList<>();
   private KDTreeNode bestNode = null;
   private double bestDistance = 0;
-  private int nodeCounts = 0;
 
   public KDTree(KDTreeNode node) {
     this.rootNode = node;
-    this.nodeCounts = this.rootNode.countNodes();
-  }
-
-  public static KDTree fromNodes(List<KDTreeNode> nodes) {
-    if (nodes.size() == 0) return null;
-    KDTreeNode node = KDTreeNode.fromNodes(nodes, 0, nodes.size(), 0);
-    return new KDTree(node);
-  }
-
-  public static KDTree fromPosts(List<Post> posts) {
-    return fromNodes(posts.stream().map(KDTreeNode::fromPost).collect(Collectors.toList()));
   }
 
   public List<KDTreeNode> findKNearest(int k, KDTreeNode node) {
@@ -44,10 +32,12 @@ public class KDTree {
     if (rootNode == null) {
       throw new IllegalStateException("Tree is Empty!");
     }
+
+    k = Math.min(k, this.countNodes());
     kbestNodes = new ArrayList<>();
     bestNode = null;
     bestDistance = 0;
-    while (kbestNodes.size() < k && kbestNodes.size() < nodeCounts) {
+    while (kbestNodes.size() < k) {
       searchKNearest(rootNode, target, 0);
       kbestDistances.add(bestDistance);
       kbestNodes.add(bestNode);
@@ -116,6 +106,7 @@ public class KDTree {
       bestNode = null;
     }
 
+    int nodeCounts = this.rootNode.countNodes();
     if (rbestNodes.size() != 0) {
       while (rbestDistances.get(rbestDistances.size() - 1) <= (Double) r
           && rbestNodes.size() < nodeCounts) {
@@ -183,15 +174,21 @@ public class KDTree {
     return this.rootNode.countNodes();
   }
 
-  public int getNodeCounts() {
-    return this.nodeCounts;
-  }
-
   public String toString() {
     return this.rootNode.toString();
   }
 
   public String display(int tabs) {
     return this.rootNode.display(tabs);
+  }
+
+  public static KDTree fromNodes(List<KDTreeNode> nodes) {
+    if (nodes.size() == 0) return null;
+    KDTreeNode node = KDTreeNode.fromNodes(nodes, 0, nodes.size(), 0);
+    return new KDTree(node);
+  }
+
+  public static KDTree fromPosts(List<Post> posts) {
+    return fromNodes(posts.stream().map(KDTreeNode::fromPost).collect(Collectors.toList()));
   }
 }

@@ -31,22 +31,6 @@ public class KDTreeNode extends GeoPoint {
     else return 1;
   }
 
-  public static KDTreeNode fromNodes(List<KDTreeNode> nodes, int begin, int end, int index) {
-    if (end <= begin) {
-      return null;
-    }
-    int n = begin + (end - begin) / 2;
-    KDTreeNode node = QuickSelect.select(nodes, begin, end - 1, n, new NodeComparator(index));
-    index = (index + 1) % 2;
-    node.setLeft(fromNodes(nodes, begin, n, index));
-    node.setRight(fromNodes(nodes, n + 1, end, index));
-    return node;
-  }
-
-  public static KDTreeNode fromPost(Post post) {
-    return new KDTreeNode(post);
-  }
-
   public Double getCoordValue(int idx) {
     return this.coords[idx];
   }
@@ -119,5 +103,21 @@ public class KDTreeNode extends GeoPoint {
     public int compare(KDTreeNode node1, KDTreeNode node2) {
       return Double.compare(node1.getCoordValue(index), node2.getCoordValue(index));
     }
+  }
+
+  public static KDTreeNode fromNodes(List<KDTreeNode> nodes, int begin, int end, int index) {
+    if (end <= begin) {
+      return null;
+    }
+    int n = begin + (end - begin) / 2;
+    KDTreeNode node = QuickSelect.select(nodes, begin, end - 1, n, new NodeComparator(index));
+    index = (index + 1) % 2;
+    node.setLeft(fromNodes(nodes, begin, n, index));
+    node.setRight(fromNodes(nodes, n + 1, end, index));
+    return node;
+  }
+
+  public static KDTreeNode fromPost(Post post) {
+    return new KDTreeNode(post);
   }
 }
