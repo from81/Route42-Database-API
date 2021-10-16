@@ -21,49 +21,22 @@ public class KDTreeTest {
 
     nodes = generateNodes(1000);
     tree = generateKDTree(nodes);
-    Assertions.assertEquals(tree.getNodeCounts(), tree.countNodes());
+    Assertions.assertEquals(1000, tree.countNodes());
   }
 
   @Test
   public void testFindOneNearest() {
-
     List<KDTreeNode> nodes = generateNodes(50);
     KDTree tree = generateKDTree(nodes);
-    System.out.println(tree.display(0));
-
     KDTreeNode target = generateTarget();
-    System.out.println(" target node : " + target);
-    int i = 0;
-    for (KDTreeNode node : nodes) {
-      System.out.println(
-          " " + i + "-th node : " + node + " distance : " + node.getDistanceTo(target));
-      i++;
-    }
-
     KDTreeNode nearestNode = tree.findKNearest(1, target).get(0);
-    System.out.println(
-        " nearest neighbor node : " + nearestNode + " distance : " + tree.getBestDistance());
-
     Assertions.assertEquals(
         nearestNode.getDistanceTo(target), tree.getBestDistance(), 1e-8, "Wrong Coordinate");
 
     nodes = generateNodes(100);
     tree = generateKDTree(nodes);
-    System.out.println(tree.display(0));
-
     target = generateTarget();
-    System.out.println(" target node : " + target);
-    i = 0;
-    for (KDTreeNode node : nodes) {
-      System.out.println(
-          " " + i + "-th node : " + node + " distance : " + node.getDistanceTo(target));
-      i++;
-    }
-
     nearestNode = tree.findKNearest(1, target).get(0);
-    System.out.println(
-        " nearest neighbor node : " + nearestNode + " distance : " + tree.getBestDistance());
-
     Assertions.assertEquals(
         nearestNode.getDistanceTo(target), tree.getBestDistance(), 1e-8, "Wrong Coordinate");
   }
@@ -71,86 +44,39 @@ public class KDTreeTest {
   @Test
   public void testFindMultiNearest() {
     int k_points = 10;
+
+    // find 10 nearest points of KD Tree with 50 nodes
     List<KDTreeNode> nodes = generateNodes(50);
     KDTree tree = generateKDTree(nodes);
-    System.out.println(tree.display(0));
-
     KDTreeNode target = generateTarget();
-    int i = 0;
-    System.out.println(" target node : " + target);
-    for (KDTreeNode node : nodes) {
-      System.out.println(
-          " " + i + "-th node : " + node + " distance : " + node.getDistanceTo(target));
-      i++;
-    }
-
     List<KDTreeNode> nearestNodes =
         tree.findKNearest(k_points, target.getLatitude(), target.getLongitude());
-    i = 0;
+    int i = 0;
     for (KDTreeNode nearestNode : nearestNodes) {
-      System.out.println(
-          " "
-              + i
-              + "-th nearest neighbor node : "
-              + nearestNode
-              + " distance : "
-              + tree.getKBestDistance(i));
       Assertions.assertEquals(
           nearestNode.getDistanceTo(target), tree.getKBestDistance(i), 1e-8, "Wrong Coordinate");
       i++;
     }
 
+    // find 10 nearest points of KD Tree with 100 nodes
     nodes = generateNodes(100);
     tree = generateKDTree(nodes);
-    System.out.println(tree.display(0));
-
     target = generateTarget();
-    System.out.println(" target node : " + target);
-    i = 0;
-    for (KDTreeNode node : nodes) {
-      System.out.println(
-          " " + i + "-th node : " + node + " distance : " + node.getDistanceTo(target));
-      i++;
-    }
-
     nearestNodes = tree.findKNearest(k_points, target.getLatitude(), target.getLongitude());
     i = 0;
     for (KDTreeNode nearestNode : nearestNodes) {
-      System.out.println(
-          " "
-              + i
-              + "-th nearest neighbor node : "
-              + nearestNode
-              + " distance : "
-              + tree.getKBestDistance(i));
       Assertions.assertEquals(
           nearestNode.getDistanceTo(target), tree.getKBestDistance(i), 1e-8, "Wrong Coordinate");
       i++;
     }
 
+    // find 10 nearest points of KD Tree with 5 nodes
     nodes = generateNodes(5);
     tree = generateKDTree(nodes);
-    System.out.println(tree.display(0));
-
     target = generateTarget();
-    System.out.println(" target node : " + target);
-    i = 0;
-    for (KDTreeNode node : nodes) {
-      System.out.println(
-          " " + i + "-th node : " + node + " distance : " + node.getDistanceTo(target));
-      i++;
-    }
-
     nearestNodes = tree.findKNearest(k_points, target.getLatitude(), target.getLongitude());
     i = 0;
     for (KDTreeNode nearestNode : nearestNodes) {
-      System.out.println(
-          " "
-              + i
-              + "-th nearest neighbor node : "
-              + nearestNode
-              + " distance : "
-              + tree.getKBestDistance(i));
       Assertions.assertEquals(
           nearestNode.getDistanceTo(target), tree.getKBestDistance(i), 1e-8, "Wrong Coordinate");
       i++;
@@ -159,77 +85,32 @@ public class KDTreeTest {
 
   @org.junit.Test
   public void testFindWithinRadius() {
+    // Create KDTree with 50 nodes
     List<KDTreeNode> nodes = generateNodes(50);
     KDTree tree = generateKDTree(nodes);
-    System.out.println(tree.display(0));
-
     KDTreeNode target = generateTarget();
-    double radius = -1.0f;
-    int i = 0;
-    System.out.println(" target node : " + target);
-    for (KDTreeNode node : nodes) {
-      System.out.println(
-          " "
-              + i
-              + "-th node : "
-              + node
-              + " distance : "
-              + node.getDistanceTo(target)
-              + " within radius "
-              + radius);
-      i++;
-    }
 
+    // Test empty set
+    double radius = -1.0f;
     List<KDTreeNode> withinRadiusNodes =
         tree.findWithinRadius(radius, target.getLatitude(), target.getLongitude());
     Assertions.assertTrue(withinRadiusNodes.isEmpty(), "Not Empty");
 
+    // Test radius 30000
     radius = 30000f;
-    i = 0;
-    System.out.println(" target node : " + target);
-    for (KDTreeNode node : nodes) {
-      System.out.println(
-          " "
-              + i
-              + "-th node : "
-              + node
-              + " distance : "
-              + node.getDistanceTo(target)
-              + " within radius "
-              + radius);
-      i++;
-    }
-
+    int i = 0;
     withinRadiusNodes = tree.findWithinRadius(radius, target.getLatitude(), target.getLongitude());
-    i = 0;
     for (KDTreeNode withinRadiusNode : withinRadiusNodes) {
-      System.out.println(
-          " "
-              + i
-              + "-th within radius node : "
-              + withinRadiusNode
-              + " distance : "
-              + tree.getRBestDistance(i)
-              + " within radius "
-              + radius);
       Assertions.assertTrue(withinRadiusNode.getDistanceTo(target) <= radius, "Bigger than Radius");
       i++;
     }
 
+    // Test all nodes within radius
     radius = 1000000f;
     target = generateTarget();
     withinRadiusNodes = tree.findWithinRadius(radius, target.getLatitude(), target.getLongitude());
     i = 0;
     for (KDTreeNode withinRadiusNode : withinRadiusNodes) {
-      System.out.println(
-          " "
-              + i
-              + "-th within radius node : "
-              + withinRadiusNode
-              + " distance : "
-              + tree.getRBestDistance(i)
-              + " within radius "
-              + radius);
       Assertions.assertTrue(withinRadiusNode.getDistanceTo(target) <= radius, "Bigger than Radius");
       i++;
     }
