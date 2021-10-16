@@ -102,27 +102,31 @@ public class KDTree {
     if (rootNode == null) {
       throw new IllegalStateException("Tree is Empty!");
     }
+
     rbestNodes = new ArrayList<>();
     rbestDistances = new ArrayList<>();
     bestNode = null;
     bestDistance = 0;
     searchRNearest(rootNode, target, 0);
-    if(bestDistance <= (Double)r){
+
+    if (bestDistance <= r) {
       rbestDistances.add(bestDistance);
       rbestNodes.add(bestNode);
       bestDistance = 0;
       bestNode = null;
     }
-    if(rbestNodes.size()!=0){
-      while(rbestDistances.get(rbestDistances.size()-1) <= (Double)r && rbestNodes.size() < nodeCounts){
+
+    if (rbestNodes.size() != 0) {
+      while (rbestDistances.get(rbestDistances.size() - 1) <= (Double) r
+          && rbestNodes.size() < nodeCounts) {
         searchRNearest(rootNode, target, 0);
         rbestDistances.add(bestDistance);
         rbestNodes.add(bestNode);
         bestDistance = 0;
         bestNode = null;
       }
-      rbestDistances.remove(rbestDistances.size()-1);
-      rbestNodes.remove(rbestNodes.size()-1);
+      rbestDistances.remove(rbestDistances.size() - 1);
+      rbestNodes.remove(rbestNodes.size() - 1);
     }
     return rbestNodes;
   }
@@ -137,7 +141,7 @@ public class KDTree {
           index = (index + 1) % 2;
           searchRNearest(diff > 0 ? root.getLeft() : root.getRight(), target, index);
           if (Math.sqrt(diff * diff)
-                  >= Math.max(bestDistance, rbestDistances.get(rbestNodes.size() - 1))) {
+              >= Math.max(bestDistance, rbestDistances.get(rbestNodes.size() - 1))) {
             return;
           }
           searchRNearest(diff > 0 ? root.getRight() : root.getLeft(), target, index);
@@ -175,11 +179,11 @@ public class KDTree {
     return rbestDistances.get(index);
   }
 
-  public int countNodes(){
+  public int countNodes() {
     return this.rootNode.countNodes();
   }
 
-  public int getNodeCounts(){
+  public int getNodeCounts() {
     return this.nodeCounts;
   }
 
