@@ -98,9 +98,8 @@ public class KDTreeNode extends GeoPoint {
 
     double dLat = Math.toRadians(other.getLatitude() - this.getLatitude());
     double dLng = Math.toRadians(other.getLongitude() - this.getLongitude());
-    double a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2)
-            + Math.cos(Math.toRadians(this.getLatitude()))
+    double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+             + Math.cos(Math.toRadians(this.getLatitude()))
                 * Math.cos(Math.toRadians(other.getLatitude()))
                 * Math.sin(dLng / 2)
                 * Math.sin(dLng / 2);
