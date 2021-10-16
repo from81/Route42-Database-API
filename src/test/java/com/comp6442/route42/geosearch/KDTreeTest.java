@@ -9,7 +9,6 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class KDTreeTest {
-
   private List<Integer> sizes = Arrays.asList(1, 5, 25, 50, 100);
   private List<KDTree> trees = new ArrayList<>();
   private KDTreeNode target;
@@ -59,6 +58,7 @@ public class KDTreeTest {
   }
 
   @Test
+  @Timeout(value = 1000, unit = TimeUnit.MILLISECONDS)
   public void testFindOneNearest() {
     for (int i=0; i < trees.size(); i++) {
       KDTreeNode nearestNode = trees.get(i).findKNearest(1, target).get(0);
@@ -72,6 +72,7 @@ public class KDTreeTest {
   }
 
   @Test
+  @Timeout(value = 1000, unit = TimeUnit.MILLISECONDS)
   public void testFindMultiNearest() {
     for (int i=0; i < trees.size(); i++) {
       int k = sizes.get(i) / 2;
@@ -88,6 +89,7 @@ public class KDTreeTest {
   }
 
   @Test
+  @Timeout(value = 1000, unit = TimeUnit.MILLISECONDS)
   public void testFindWithinRadius() {
     List<KDTreeNode> nodes = generateNodes(50);
     KDTree tree = generateKDTree(nodes);
