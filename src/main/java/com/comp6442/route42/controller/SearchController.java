@@ -72,7 +72,7 @@ public class SearchController {
   public ResponseEntity<List<Post>> getWithinRadius(
           @RequestParam(value = "lat") Double lat,
           @RequestParam(value = "lon") Double lon,
-          @RequestParam(defaultValue = "1000", value = "radius") Double radius) throws ExecutionException, InterruptedException {
+          @RequestParam(defaultValue = "10000", value = "radius") Double radius) throws ExecutionException, InterruptedException {
     logger.log(Level.INFO, String.format("GET/search/wrn: radius=%f lat=%f lon=%f", radius, lat, lon));
     KDTree tree = KDTree.fromPosts(postService.getMany(200));
     List<Pair<KDTreeNode,Double>> wrnPairs = tree.findWithinRadius(radius, lat, lon);
