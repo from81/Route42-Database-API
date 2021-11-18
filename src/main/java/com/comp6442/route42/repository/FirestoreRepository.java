@@ -28,7 +28,7 @@ public abstract class FirestoreRepository<T extends Model> {
       FirebaseOptions options =
           FirebaseOptions.builder()
               .setCredentials(credentials)
-              .setDatabaseUrl("https://.firebaseio.com/")
+              .setDatabaseUrl("https://softwareconstruction42.firebaseio.com/")
               .build();
 
       // Initialize the default app
