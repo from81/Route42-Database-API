@@ -1,9 +1,6 @@
 ## About
 
-Warning
-- Unlike the client side app, this REST API by default does not use the emulator (because I haven't configured it to use the emulator). That means even if you run the REST API locally on your machine, it is still connecting to the firestore in the cloud, not emulator. Be careful about the [API limit](https://firebase.google.com/docs/firestore/quotas).
-- For hashtag queries, the API runs an ArrayContains for each individual hashtag, and performs a union over all results. 
-  - Please do not pass a large number of hashtags. For now, the limit is set to 10 hashtags.
+REST API for providing flexible access to Firebase backend data store.
 
 ## Run
 
@@ -51,7 +48,3 @@ curl --header "Content-Type: application/json" \
     http://13.211.169.204:8080/search
 ```
 
-## AWS EC2 instance (Production)
-
-- Public IPv4 DNS: `ec2-13-211-169-204.ap-southeast-2.compute.amazonaws.com`
-- Public IPv4 address: `13.211.169.204`
